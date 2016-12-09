@@ -16,7 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Doc", "Doc", "{FB4C4380-EE4
 		Doc\AdvancedConnect_Options-Applications.png = Doc\AdvancedConnect_Options-Applications.png
 		Doc\AdvancedConnect_Options-Main.png = Doc\AdvancedConnect_Options-Main.png
 		Doc\Keepass_ContexMenu.png = Doc\Keepass_ContexMenu.png
-		Doc\Keepass_CustomFields#.png = Doc\Keepass_CustomFields#.png
+		Doc\Keepass_CustomFields.png = Doc\Keepass_CustomFields.png
 	EndProjectSection
 EndProject
 Global

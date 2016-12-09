@@ -22,7 +22,15 @@ On windows operation system the native remote desktop client have no option to p
 The **Path** and **Commandline Options** column you can use keepass variables and OS variables.
 
 
-
+## Example
+- Configure main options
+<p align="center"><img src="https://github.com/aalbng/AdvancedConnectPlugin/blob/master/Doc/AdvancedConnect_Options-Main.png"/></p>
+- Add your applications
+<p align="center"><img src="https://github.com/aalbng/AdvancedConnectPlugin/blob/master/Doc/AdvancedConnect_Options-Applications.png"/></p>
+- Set custom fields in keepass entries
+<p align="center"><img src="https://github.com/aalbng/AdvancedConnectPlugin/blob/master/Doc/Keepass_CustomFields.png"/></p>
+- Start your applications directly from keepass
+<p align="center"><img src="https://github.com/aalbng/AdvancedConnectPlugin/blob/master/Doc/Keepass_ContexMenu.png"/></p>
 
 ## Security
 
