@@ -46,9 +46,9 @@ namespace AdvancedConnectPlugin.Data
             errorMessage = String.Empty;
 
             //Check if application path exist
-            if (File.Exists(RDPConnectionItem.pathToRemoteDesktop))
+            if (File.Exists(Environment.ExpandEnvironmentVariables(RDPConnectionItem.pathToRemoteDesktop)))
             {
-                if (File.Exists(RDPConnectionItem.pathToCMDKey))
+                if (File.Exists(Environment.ExpandEnvironmentVariables(RDPConnectionItem.pathToCMDKey)))
                 {
                     //Overwrite the default rdp parameter if set in keepass entry
                     if (this.keepassEntry.Strings.ReadSafe(this.plugin.settings.connectionOptionsField).Length > 0)

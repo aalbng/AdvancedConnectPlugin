@@ -27,16 +27,23 @@ namespace AdvancedConnectPlugin.Data
 
 
         /**
-         * Replaces all placeholders with keepass compiling engine
+         * Replaces all placeholders with keepass compiling engine and replace os environment variables
          */
         protected String fillPlaceholders(String applicationOptions)
         {
+            String resolvedPathOrOptions = String.Empty;
+
+            //Resolv keepass variables
             Boolean encodeAsAutoType = false;
             Boolean encodeQuotesForCommandline = true;
             SprCompileFlags compileFlags = SprCompileFlags.All; // Which placeholders should be replaced
             SprContext replaceContext = new SprContext(this.keepassEntry, this.keepassDatabase, compileFlags, encodeAsAutoType, encodeQuotesForCommandline);
+            resolvedPathOrOptions = SprEngine.Compile(applicationOptions, replaceContext);
 
-            return SprEngine.Compile(applicationOptions, replaceContext);
+            //Resolv OS variables
+            resolvedPathOrOptions = Environment.ExpandEnvironmentVariables(resolvedPathOrOptions);
+
+            return resolvedPathOrOptions;
         }
 
     }

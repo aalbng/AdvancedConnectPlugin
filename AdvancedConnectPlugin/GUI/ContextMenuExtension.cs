@@ -80,7 +80,7 @@ namespace AdvancedConnectPlugin.GUI
                         {
                             menuItem = new ToolStripMenuItem();
                             menuItem.Text = application.name;
-                            try { menuItem.Image = System.Drawing.Icon.ExtractAssociatedIcon(application.path).ToBitmap(); } catch (Exception) { } //Extracts the icon from the executable and sets it as context menut item bitmap
+                            try { menuItem.Image = System.Drawing.Icon.ExtractAssociatedIcon(Environment.ExpandEnvironmentVariables(application.path)).ToBitmap(); } catch (Exception) { } //Resolvs OS variables and extracts the icon from the executable and sets it as context menut item bitmap
                             menuItem.Tag = new Data.CustomConnectionItem(this.plugin, application, selectedEntries[0]); //Contains the spezific connectionitem (kpentry + applicationitem) object reference
                             menuItem.Click += entryContextMenuItem_CustomApplication_Click;
                             menuItemList.Add(menuItem);

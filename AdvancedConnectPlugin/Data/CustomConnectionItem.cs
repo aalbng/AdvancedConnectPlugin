@@ -34,8 +34,8 @@ namespace AdvancedConnectPlugin.Data
         {
             errorMessage = String.Empty;
 
-            //Check if application path exist
-            if (File.Exists(this.application.path))
+            //Check if application path exist with resolved OS variables
+            if (File.Exists(Environment.ExpandEnvironmentVariables(this.application.path)))
             {
                 //Overwrite application options if set in keepass entry
                 if (this.keepassEntry.Strings.ReadSafe(this.plugin.settings.connectionOptionsField).Length > 0)
@@ -49,7 +49,7 @@ namespace AdvancedConnectPlugin.Data
                     Thread.CurrentThread.IsBackground = true; //Background threads will stop automatically on program close
                     
                     //Fill placeholders in options and start programm
-                    StartProcess.Start(this.application.path, fillPlaceholders(this.application.options));
+                    StartProcess.Start(fillPlaceholders(this.application.path), fillPlaceholders(this.application.options));
                 }).Start();
 
 
