@@ -11,7 +11,7 @@ AdvancedConnect is a plugin for [KeePass](http://keepass.info) password manager 
 ## Installation
 
 - Download the [latest](https://github.com/aalbng/AdvancedConnectPlugin/releases/latest) release.
-- Copy the QuickConnectPlugin.plgx in your KeePass directory and restart the application.
+- Copy the AdvancedConnectPlugin.plgx in your KeePass directory and restart the application.
 
 ## Usage
 
