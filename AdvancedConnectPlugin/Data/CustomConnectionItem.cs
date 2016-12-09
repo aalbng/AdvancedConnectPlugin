@@ -21,6 +21,7 @@ namespace AdvancedConnectPlugin.Data
     public class CustomConnectionItem : ConnectionItem
     {
         private ApplicationItem application = null;
+        private String customConnectionOptions = String.Empty;
 
         public CustomConnectionItem(AdvancedConnectPluginExt plugin, ApplicationItem application, PwEntry keepassEntry)
         {
@@ -28,6 +29,7 @@ namespace AdvancedConnectPlugin.Data
             this.keepassDatabase = this.plugin.keepassHost.Database;
             this.application = application;
             this.keepassEntry = keepassEntry;
+            this.customConnectionOptions = this.application.options;
         }
                 
         public Boolean startConnection(out String errorMessage)
@@ -40,7 +42,7 @@ namespace AdvancedConnectPlugin.Data
                 //Overwrite application options if set in keepass entry
                 if (this.keepassEntry.Strings.ReadSafe(this.plugin.settings.connectionOptionsField).Length > 0)
                 {
-                    this.application.options = this.keepassEntry.Strings.ReadSafe(this.plugin.settings.connectionOptionsField);
+                    this.customConnectionOptions = this.keepassEntry.Strings.ReadSafe(this.plugin.settings.connectionOptionsField);
                 }
                 
                 //Create a thread to allow non gui blocking sleeps
@@ -49,7 +51,7 @@ namespace AdvancedConnectPlugin.Data
                     Thread.CurrentThread.IsBackground = true; //Background threads will stop automatically on program close
                     
                     //Fill placeholders in options and start programm
-                    StartProcess.Start(fillPlaceholders(this.application.path), fillPlaceholders(this.application.options));
+                    StartProcess.Start(fillPlaceholders(this.application.path), fillPlaceholders(this.customConnectionOptions));
                 }).Start();
 
 
