@@ -8,6 +8,15 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A6523E56-7918-467F-8DB8-532C1C526DD6}"
 	ProjectSection(SolutionItems) = preProject
 		build.bat = build.bat
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Doc", "Doc", "{FB4C4380-EE4F-436B-AA4D-38DCF9F7B3E2}"
+	ProjectSection(SolutionItems) = preProject
+		Doc\AdvancedConnect_Options-Applications.png = Doc\AdvancedConnect_Options-Applications.png
+		Doc\AdvancedConnect_Options-Main.png = Doc\AdvancedConnect_Options-Main.png
+		Doc\Keepass_ContexMenu.png = Doc\Keepass_ContexMenu.png
+		Doc\Keepass_CustomFields#.png = Doc\Keepass_CustomFields#.png
 	EndProjectSection
 EndProject
 Global
@@ -23,5 +32,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FB4C4380-EE4F-436B-AA4D-38DCF9F7B3E2} = {A6523E56-7918-467F-8DB8-532C1C526DD6}
 	EndGlobalSection
 EndGlobal
