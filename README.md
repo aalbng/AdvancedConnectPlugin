@@ -4,7 +4,8 @@ AdvancedConnect is a plugin for [KeePass](http://keepass.info) password manager 
 
 ## Requirements
 
-- Microsoft Windows with .NET\Mono 2.0 or newer.
+- Microsoft Windows with .NET/[Mono](http://www.mono-project.com/download/) 2.0 or newer.
+- Unix/Linux with [Mono](http://www.mono-project.com/download/) 2.0 or newer.
 - [KeePass](http://keepass.info) version 2.28 or newer.
 
 
