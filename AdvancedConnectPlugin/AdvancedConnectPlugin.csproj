@@ -36,6 +36,9 @@
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Icon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="KeePass">
       <HintPath>..\Libs\KeePass.exe</HintPath>
@@ -68,11 +71,6 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GUI\ToolsMenuExtension.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Data\Settings.cs" />
     <Compile Include="Tools\SortableBindingList.cs" />
     <Compile Include="Tools\StartProcess.cs" />
@@ -85,10 +83,6 @@
     <EmbeddedResource Include="GUI\Options.resx">
       <DependentUpon>Options.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include="CHANGELOG.txt">
@@ -100,10 +94,9 @@
     <Content Include="NOTICE.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Resources\ICO_AdvancedConnect.ico" />
+    <EmbeddedResource Include="Icon.ico" />
     <None Include="Properties\DataSources\AdvancedConnectPlugin.Data.Settings.datasource" />
     <None Include="Properties\DataSources\AdvancedConnectPluginExt.datasource" />
-    <None Include="Resources\IMG_AdvancedConnect.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="AdvancedConnectPlugin.licenseheader" />

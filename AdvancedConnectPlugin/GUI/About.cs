@@ -23,19 +23,21 @@ namespace AdvancedConnectPlugin.GUI
 {
     public partial class About : Form
     {
-        public About()
+        private AdvancedConnectPluginExt plugin = null;
+
+        public About(AdvancedConnectPluginExt plugin)
         {
+            this.plugin = plugin;
+
             InitializeComponent();
 
             //Customize GUI from Designer
-            this.Icon = (System.Drawing.Icon)Properties.Resources.ICO_AdvancedConnect;
+            this.Icon = (System.Drawing.Icon)this.plugin.pluginIcon;
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
 
-
-
-            this.labelTitle.Text = ((AssemblyTitleAttribute)Attribute.GetCustomAttribute(Assembly.GetExecutingAssembly(), typeof(AssemblyTitleAttribute), false)).Title;
+                        this.labelTitle.Text = ((AssemblyTitleAttribute)Attribute.GetCustomAttribute(Assembly.GetExecutingAssembly(), typeof(AssemblyTitleAttribute), false)).Title;
             this.labelVersion.Text = "Version " + Assembly.GetExecutingAssembly().GetName().Version.ToString();
             this.labelCopyright.Text = ((AssemblyCopyrightAttribute)Attribute.GetCustomAttribute(Assembly.GetExecutingAssembly(), typeof(AssemblyCopyrightAttribute), false)).Copyright + " " + ((AssemblyCompanyAttribute)Attribute.GetCustomAttribute(Assembly.GetExecutingAssembly(), typeof(AssemblyCompanyAttribute), false)).Company;
 

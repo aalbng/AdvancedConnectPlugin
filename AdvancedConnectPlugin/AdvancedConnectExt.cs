@@ -12,6 +12,7 @@ See the License for the specific language governing permissions and limitations 
 */
 using KeePass.Plugins;
 using System;
+using System.Drawing;
 using System.IO;
 
 
@@ -25,6 +26,7 @@ namespace AdvancedConnectPlugin
         public String pathToPluginConfigFile = String.Empty;
         private GUI.ToolsMenuExtension toolsMenuExtension = null;
         private GUI.ContextMenuExtension contextMenuExtension = null;
+        public Icon pluginIcon = null;
         
         
         //Keepass start; Load plugin
@@ -33,6 +35,10 @@ namespace AdvancedConnectPlugin
             //Reference KeePass main application object
             this.keepassHost = keepassHost;
 
+            //Load embedded icon
+            System.Reflection.Assembly pluginAssembly = System.Reflection.Assembly.GetExecutingAssembly();
+            this.pluginIcon = new Icon(pluginAssembly.GetManifestResourceStream(pluginAssembly.GetName().Name + ".Icon.ico"));
+            
             //Load\Create Config 
             buildConfigPath();
             settings = new Data.Settings(this);

@@ -46,7 +46,7 @@ namespace AdvancedConnectPlugin.GUI
             // Add menu item for "Advanced Connect"
             pluginMenuItem = new ToolStripMenuItem();
             pluginMenuItem.Text = "Advanced Connect";
-            pluginMenuItem.Image = (System.Drawing.Image)Properties.Resources.IMG_AdvancedConnect;
+            pluginMenuItem.Image = (System.Drawing.Image)this.plugin.pluginIcon.ToBitmap();
             toolStripMenu.Add(pluginMenuItem);
 
             // Add menu item for "Advanced Conenct -> Options"
@@ -73,7 +73,7 @@ namespace AdvancedConnectPlugin.GUI
 
         void aboutOnClick(object sender, EventArgs e)
         {
-            Form about = new About();
+            Form about = new About(this.plugin);
             about.ShowDialog(this.plugin.keepassHost.MainWindow);
 
         }

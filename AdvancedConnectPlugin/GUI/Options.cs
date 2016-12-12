@@ -32,7 +32,7 @@ namespace AdvancedConnectPlugin.GUI
             InitializeComponent();
 
             //Customize GUI from designer
-            this.Icon = (System.Drawing.Icon)Properties.Resources.ICO_AdvancedConnect;
+            this.Icon = (System.Drawing.Icon)this.plugin.pluginIcon;
 
             //Add empty values to text-, ceck- and comboboxes
             this.comboBoxConnectionMethod.Items.Add(String.Empty);
