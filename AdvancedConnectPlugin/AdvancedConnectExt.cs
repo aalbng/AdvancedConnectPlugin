@@ -12,12 +12,7 @@ See the License for the specific language governing permissions and limitations 
 */
 using KeePass.Plugins;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
-using System.Resources;
-using System.Windows.Forms;
-
 
 
 
@@ -26,8 +21,8 @@ namespace AdvancedConnectPlugin
     public sealed class AdvancedConnectPluginExt : KeePass.Plugins.Plugin
     {
         public IPluginHost keepassHost = null;
-        public Data.Settings settings = null;
-        public String pathToPluginConfig = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "KeePass\\AdvancedConnect.xml"); 
+        public Data.Settings settings = null; 
+        public String pathToPluginConfigFile = String.Empty;
         private GUI.ToolsMenuExtension toolsMenuExtension = null;
         private GUI.ContextMenuExtension contextMenuExtension = null;
         
@@ -39,6 +34,7 @@ namespace AdvancedConnectPlugin
             this.keepassHost = keepassHost;
 
             //Load\Create Config 
+            buildConfigPath();
             settings = new Data.Settings(this);
             settings = this.settings.load();
                         
@@ -59,6 +55,17 @@ namespace AdvancedConnectPlugin
 
         }
         
+        //Build configuration folder structure
+        public void buildConfigPath()
+        {
+            //Set and create directory
+            String configDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "KeePass/");
+            System.IO.Directory.CreateDirectory(configDirectory);
+
+            //Set configuration file path
+            String configFileName = "AdvancedConnect.xml";
+            this.pathToPluginConfigFile = Path.Combine(configDirectory, configFileName);
+        }
 
 
     }

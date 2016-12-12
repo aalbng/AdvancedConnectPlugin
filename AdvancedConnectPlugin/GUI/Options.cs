@@ -136,7 +136,7 @@ namespace AdvancedConnectPlugin.GUI
             //Write settings to settings file
             if (this.plugin.settings.save() == false)
             {
-                MessageBox.Show(("Configuration " + this.plugin.pathToPluginConfig + " could not be written." ), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(("Configuration " + this.plugin.pathToPluginConfigFile + " could not be written." ), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }         
         }
 

@@ -59,10 +59,10 @@ namespace AdvancedConnectPlugin.Data
             Settings loadedSettings = null;
 
             //Load settings from file if possible or create a new one
-            if (File.Exists(this.plugin.pathToPluginConfig))
+            if (File.Exists(this.plugin.pathToPluginConfigFile))
             {
                 XmlSerializer serializerObj = new XmlSerializer(typeof(Settings));
-                FileStream readFileStream = new FileStream(this.plugin.pathToPluginConfig, FileMode.Open, FileAccess.Read, FileShare.Read);
+                FileStream readFileStream = new FileStream(this.plugin.pathToPluginConfigFile, FileMode.Open, FileAccess.Read, FileShare.Read);
                 loadedSettings = (Settings)serializerObj.Deserialize(readFileStream);
                 readFileStream.Close();
             }
@@ -82,7 +82,7 @@ namespace AdvancedConnectPlugin.Data
             try
             {
                 XmlSerializer serializerObj = new XmlSerializer(typeof(Settings));
-                TextWriter writeFileStream = new StreamWriter(this.plugin.pathToPluginConfig);
+                TextWriter writeFileStream = new StreamWriter(this.plugin.pathToPluginConfigFile);
                 serializerObj.Serialize(writeFileStream, this);
                 writeFileStream.Close();
             }
