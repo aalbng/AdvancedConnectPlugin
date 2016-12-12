@@ -1,3 +1,6 @@
+1.0.3
+Added Unix/Linux compatibility
+
 1.0.2
 Bugfix
 
