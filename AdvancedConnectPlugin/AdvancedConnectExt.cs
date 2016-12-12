@@ -45,12 +45,12 @@ namespace AdvancedConnectPlugin
             settings = this.settings.load();
                         
             //Extend Tools Menu (Options window)
-            toolsMenuExtension = new GUI.ToolsMenuExtension(this);
-            toolsMenuExtension.extendToolsMenu();
+            this.toolsMenuExtension = new GUI.ToolsMenuExtension(this);
+            this.toolsMenuExtension.extendToolsMenu();
 
             //Contextmenu extension (Add handlers)
-            contextMenuExtension = new GUI.ContextMenuExtension(this);
-            contextMenuExtension.extendEntryContextMenu();
+            this.contextMenuExtension = new GUI.ContextMenuExtension(this);
+            this.contextMenuExtension.extendEntryContextMenu();
 
             return true;
         }
@@ -58,7 +58,7 @@ namespace AdvancedConnectPlugin
         //Keepass shutdown; Unload plugin
         public override void Terminate()
         {
-
+            this.toolsMenuExtension.removeToolsMenuExtensions();
         }
         
         //Build configuration folder structure

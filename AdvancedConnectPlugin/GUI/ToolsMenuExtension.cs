@@ -23,6 +23,7 @@ namespace AdvancedConnectPlugin.GUI
 
         private AdvancedConnectPluginExt plugin = null;
 
+        private ToolStripItemCollection toolStripMenu = null;
         private ToolStripSeparator pluginMenuSeperator = null;
         private ToolStripMenuItem pluginMenuItem = null;
         private ToolStripMenuItem pluginMenuItemAbout = null;
@@ -37,32 +38,42 @@ namespace AdvancedConnectPlugin.GUI
         public void extendToolsMenu()
         {
             // Get a reference to the 'Tools' menu item container
-            ToolStripItemCollection toolStripMenu = this.plugin.keepassHost.MainWindow.ToolsMenu.DropDownItems;
+            this.toolStripMenu = this.plugin.keepassHost.MainWindow.ToolsMenu.DropDownItems;
 
             // Add a separator at the bottom
-            pluginMenuSeperator = new ToolStripSeparator();
-            toolStripMenu.Add(pluginMenuSeperator);
+            this.pluginMenuSeperator = new ToolStripSeparator();
+            this.toolStripMenu.Add(this.pluginMenuSeperator);
 
             // Add menu item for "Advanced Connect"
-            pluginMenuItem = new ToolStripMenuItem();
-            pluginMenuItem.Text = "Advanced Connect";
-            pluginMenuItem.Image = (System.Drawing.Image)this.plugin.pluginIcon.ToBitmap();
-            toolStripMenu.Add(pluginMenuItem);
+            this.pluginMenuItem = new ToolStripMenuItem();
+            this.pluginMenuItem.Text = "Advanced Connect";
+            this.pluginMenuItem.Image = (System.Drawing.Image)this.plugin.pluginIcon.ToBitmap();
+            this.toolStripMenu.Add(this.pluginMenuItem);
 
             // Add menu item for "Advanced Conenct -> Options"
-            pluginMenuItemOptions = new ToolStripMenuItem();
-            pluginMenuItemOptions.Text = "Options";
-            pluginMenuItemOptions.Click += new EventHandler(optionsOnClick);
-            pluginMenuItem.DropDownItems.Add(pluginMenuItemOptions);
+            this.pluginMenuItemOptions = new ToolStripMenuItem();
+            this.pluginMenuItemOptions.Text = "Options";
+            this.pluginMenuItemOptions.Click += new EventHandler(optionsOnClick);
+            this.pluginMenuItem.DropDownItems.Add(this.pluginMenuItemOptions);
 
             // Add menu item for "Advanced Conenct -> About"
-            pluginMenuItemAbout = new ToolStripMenuItem();
-            pluginMenuItemAbout.Text = "About";
-            pluginMenuItemAbout.Click += new EventHandler(aboutOnClick);
-            pluginMenuItem.DropDownItems.Add(pluginMenuItemAbout);
+            this.pluginMenuItemAbout = new ToolStripMenuItem();
+            this.pluginMenuItemAbout.Text = "About";
+            this.pluginMenuItemAbout.Click += new EventHandler(aboutOnClick);
+            this.pluginMenuItem.DropDownItems.Add(pluginMenuItemAbout);
             
 
         }
+
+        //Remove extension
+        public void removeToolsMenuExtensions()
+        {
+            this.toolStripMenu.Remove(this.pluginMenuSeperator);
+            this.toolStripMenu.Remove(this.pluginMenuItem);
+            this.pluginMenuItem.DropDownItems.Remove(this.pluginMenuItemOptions);
+            this.pluginMenuItem.DropDownItems.Remove(this.pluginMenuItemAbout);
+        }
+
 
         void optionsOnClick(object sender, EventArgs e)
         {
