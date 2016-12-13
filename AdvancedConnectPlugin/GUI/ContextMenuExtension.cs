@@ -46,13 +46,11 @@ namespace AdvancedConnectPlugin.GUI
                 //Define menuItem var
                 ToolStripMenuItem menuItem = null;
 
-                //Add seperator to list 
-                menuItemList.Add(new ToolStripSeparator());
-
                 //Load connection methods into array (splitted by new line)
                 String[] methodArr = Tools.StringCustom.splitByNewLine(selectedEntries[0].Strings.ReadSafe(this.plugin.settings.connectionMethodField));
 
-                //Add a menuItem for each connection method and each programm with this connection method                
+                //Add a menuItem for each connection method and each programm with this connection method
+                Array.Sort<String>(methodArr);
                 foreach (var method in methodArr)
                 {
                     //Add Builtin RDP support entries
@@ -76,7 +74,7 @@ namespace AdvancedConnectPlugin.GUI
                     //Add Custom applications (loop)
                     foreach (var application in this.plugin.settings.applicationsBindingList)
                     {
-                        if(method == application.method)
+                        if (method == application.method)
                         {
                             menuItem = new ToolStripMenuItem();
                             menuItem.Text = application.name;
@@ -86,15 +84,19 @@ namespace AdvancedConnectPlugin.GUI
                             menuItemList.Add(menuItem);
                         }
                     }
+
+                }
+
+                //Add seperator to list 
+                menuItemList.Add(new ToolStripSeparator());
+
+
+                //Insert all items to the top of the context menu (reverse order)
+                for (int i = menuItemList.Count - 1; i >= 0; i--)
+                {
+                    this.entryContextMenu.Items.Insert(0, menuItemList[i]);
                 }
                                 
-                
-                //Insert all items to the top of the context menu (Item order will be reversed)
-                foreach (var item in menuItemList)
-                {
-                    this.entryContextMenu.Items.Insert(0, item);                    
-                }
-                
             }
         }
 
