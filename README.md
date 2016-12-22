@@ -21,7 +21,7 @@ AdvancedConnect is a plugin for [KeePass](http://keepass.info) password manager 
 On windows operation system the native remote desktop client have no option to provide the username and password via command-line. The built-in rdp support is a little workaround wich provides this functionality. You have to configure the keepass connection field (containing ip or hostname), a connection method (e.g. rdp) and you can set additional parameters (e.g. /w:1440 /h:900).<br />
 - Use the **Applications** tab in the **Options** dialog to configure your connection applications. <br />
 The **Path** and **Commandline Options** column is also supporting keepass placeholders and OS environment variables.
-- To use a **portable configuration** you have to create a emtpy file named **AdvancedConnect.xml** next to **KeePass.exe**. <br />
+- To use a **portable configuration** you have to create an emtpy file named **AdvancedConnect.xml** next to **KeePass.exe**. <br />
 (If a portable\admin configuration file is available, the default configuration *%appdata%\Keepass\AdvancedConnect.xml* will be ignored)
 
 
