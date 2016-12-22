@@ -72,6 +72,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GUI\ToolsMenuExtension.cs" />
     <Compile Include="Data\Settings.cs" />
+    <Compile Include="Tools\ExecutableDirectory.cs" />
     <Compile Include="Tools\SortableBindingList.cs" />
     <Compile Include="Tools\StartProcess.cs" />
     <Compile Include="Tools\StringCustom.cs" />

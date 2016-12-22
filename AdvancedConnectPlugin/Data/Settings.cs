@@ -63,16 +63,29 @@ namespace AdvancedConnectPlugin.Data
             {
                 XmlSerializer serializerObj = new XmlSerializer(typeof(Settings));
                 FileStream readFileStream = new FileStream(this.plugin.pathToPluginConfigFile, FileMode.Open, FileAccess.Read, FileShare.Read);
-                loadedSettings = (Settings)serializerObj.Deserialize(readFileStream);
-                readFileStream.Close();
+
+                //Try to parse settings from configuration file. Create new configuration on parsing error
+                try
+                {
+                    //Load configuration
+                    loadedSettings = (Settings)serializerObj.Deserialize(readFileStream);
+                }
+                catch (InvalidOperationException)
+                {
+                    //Create new configuration on error
+                    loadedSettings = new Settings();
+                }
+                finally
+                {
+                    readFileStream.Close();
+                }                                          
             }
             else
             {
+                //Create new configuration file if there is no configuration file present
                 loadedSettings = new Settings();  
             }
-
-
-
+            
             loadedSettings.plugin = this.plugin;
             return loadedSettings;
         }

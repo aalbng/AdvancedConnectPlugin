@@ -10,12 +10,12 @@ Unless required by applicable law or agreed to in writing, software distributed 
 distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
 See the License for the specific language governing permissions and limitations under the License.
 */
+using AdvancedConnectPlugin.Tools;
 using KeePass.Plugins;
 using System;
 using System.Drawing;
 using System.IO;
-
-
+using System.Reflection;
 
 namespace AdvancedConnectPlugin
 {
@@ -61,18 +61,28 @@ namespace AdvancedConnectPlugin
             this.toolsMenuExtension.removeToolsMenuExtensions();
         }
         
-        //Build configuration folder structure
+        //Build configuration
         public void buildConfigPath()
         {
-            //Set and create directory
-            String configDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "KeePass/");
-            System.IO.Directory.CreateDirectory(configDirectory);
-
-            //Set configuration file path
+            //Set configuration file name
             String configFileName = "AdvancedConnect.xml";
-            this.pathToPluginConfigFile = Path.Combine(configDirectory, configFileName);
-        }
+            String configDirectory = String.Empty;
 
+            //Check if portable / admin configuration is available      
+            if (File.Exists(Path.Combine(ExecutableDirectory.GetExecutableDirectory(), configFileName)))
+            {
+                //Set directory in installation path (portable configuration)
+                configDirectory = ExecutableDirectory.GetExecutableDirectory();
+                this.pathToPluginConfigFile = Path.Combine(configDirectory, configFileName);
+            }
+            else
+            {
+                //Set and create directory within appdata roaming (user configuration)
+                configDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "KeePass/");
+                System.IO.Directory.CreateDirectory(configDirectory);
+                this.pathToPluginConfigFile = Path.Combine(configDirectory, configFileName);
+            }
+        }
 
     }
 }
