@@ -1,3 +1,6 @@
+1.0.5
+Added updatecheck
+
 1.0.4
 Added optional portable/admin configuration
 
