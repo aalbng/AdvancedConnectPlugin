@@ -19,7 +19,7 @@ using System.Reflection;
 
 namespace AdvancedConnectPlugin
 {
-    public sealed class AdvancedConnectPluginExt : KeePass.Plugins.Plugin
+    public sealed class AdvancedConnectPluginExt : Plugin
     {
         public IPluginHost keepassHost = null;
         public Data.Settings settings = null; 
@@ -27,8 +27,8 @@ namespace AdvancedConnectPlugin
         private GUI.ToolsMenuExtension toolsMenuExtension = null;
         private GUI.ContextMenuExtension contextMenuExtension = null;
         public Icon pluginIcon = null;
-        
-        
+
+
         //Keepass start; Load plugin
         public override bool Initialize(IPluginHost keepassHost)
         {
@@ -84,5 +84,10 @@ namespace AdvancedConnectPlugin
             }
         }
 
+        //Keepass update check
+        public override string UpdateUrl
+        {
+            get { return "https://raw.githubusercontent.com/gusowski1/AdvancedConnectPlugin/master/version.txt"; }
+        }
     }
 }
