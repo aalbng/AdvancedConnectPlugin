@@ -87,7 +87,7 @@ namespace AdvancedConnectPlugin
         //Keepass update check
         public override string UpdateUrl
         {
-            get { return "https://raw.githubusercontent.com/gusowski1/AdvancedConnectPlugin/master/version.txt"; }
+            get { return "https://raw.githubusercontent.com/aalbng/AdvancedConnectPlugin/master/version.txt"; }
         }
     }
 }
