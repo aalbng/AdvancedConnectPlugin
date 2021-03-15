@@ -78,7 +78,7 @@ namespace AdvancedConnectPlugin
             else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), configFileName)))
             {
                 //Set directory in installation path (portable configuration)
-                configDirectory = ExecutableDirectory.GetExecutableDirectory();
+                configDirectory = Directory.GetCurrentDirectory();
                 this.pathToPluginConfigFile = Path.Combine(configDirectory, configFileName);
             }
             else
