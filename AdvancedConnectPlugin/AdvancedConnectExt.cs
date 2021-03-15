@@ -60,7 +60,7 @@ namespace AdvancedConnectPlugin
         {
             this.toolsMenuExtension.removeToolsMenuExtensions();
         }
-        
+
         //Build configuration
         public void buildConfigPath()
         {
@@ -70,6 +70,12 @@ namespace AdvancedConnectPlugin
 
             //Check if portable / admin configuration is available      
             if (File.Exists(Path.Combine(ExecutableDirectory.GetExecutableDirectory(), configFileName)))
+            {
+                //Set directory in installation path (portable configuration)
+                configDirectory = ExecutableDirectory.GetExecutableDirectory();
+                this.pathToPluginConfigFile = Path.Combine(configDirectory, configFileName);
+            }
+            else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), configFileName)))
             {
                 //Set directory in installation path (portable configuration)
                 configDirectory = ExecutableDirectory.GetExecutableDirectory();
