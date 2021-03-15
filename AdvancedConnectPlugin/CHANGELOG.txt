@@ -1,3 +1,6 @@
+1.0.6
+Added networkshare support with portable config
+
 1.0.5
 Added updatecheck
 
