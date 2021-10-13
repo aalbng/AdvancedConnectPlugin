@@ -107,7 +107,7 @@ namespace AdvancedConnectPlugin.Data
         //Creating cmdkey parameters with Keepass placeholders
         private String buildAddingCmdkeyParameter()
         {
-            this.cmdkeyParameter = "/generic:TERMSRV/" + this.keepassEntry.Strings.ReadSafe(this.plugin.settings.rdpConnectionAddressField) 
+            this.cmdkeyParameter = "/generic:TERMSRV/" + this.keepassEntry.Strings.ReadSafe(this.plugin.settings.rdpConnectionAddressField).Split(':')[0]
                 + " /user:{USERNAME} /pass:{PASSWORD}";
             return this.cmdkeyParameter;
         }
@@ -115,7 +115,7 @@ namespace AdvancedConnectPlugin.Data
         //Creating cmdkey parameters with Keepass placeholders
         private String buildRemovingCmdkeyParameter()
         {
-            this.cmdkeyParameter = "/delete:TERMSRV/" + this.keepassEntry.Strings.ReadSafe(this.plugin.settings.rdpConnectionAddressField);
+            this.cmdkeyParameter = "/delete:TERMSRV/" + this.keepassEntry.Strings.ReadSafe(this.plugin.settings.rdpConnectionAddressField).Split(':')[0];
             return this.cmdkeyParameter;
         }
 
