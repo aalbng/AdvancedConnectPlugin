@@ -54,6 +54,7 @@
             this.labelRDPConnectionParameter = new System.Windows.Forms.Label();
             this.labelRDPInfo = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.checkBoxWarnMissingField = new System.Windows.Forms.CheckBox();
             this.tabControl.SuspendLayout();
             this.tabPageMain.SuspendLayout();
             this.groupBoxFieldMappings.SuspendLayout();
@@ -91,6 +92,7 @@
             this.groupBoxFieldMappings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxFieldMappings.Controls.Add(this.checkBoxWarnMissingField);
             this.groupBoxFieldMappings.Controls.Add(this.label1);
             this.groupBoxFieldMappings.Controls.Add(this.labelRDPInfo);
             this.groupBoxFieldMappings.Controls.Add(this.labelRDPConnectionParameter);
@@ -353,9 +355,21 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(484, 2);
             this.label1.TabIndex = 16;
-            // 
+            //
+            // checkBoxWarnMissingField
+            //
+            this.checkBoxWarnMissingField.AutoSize = true;
+            this.checkBoxWarnMissingField.Checked = true;
+            this.checkBoxWarnMissingField.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxWarnMissingField.Location = new System.Drawing.Point(7, 258);
+            this.checkBoxWarnMissingField.Name = "checkBoxWarnMissingField";
+            this.checkBoxWarnMissingField.Size = new System.Drawing.Size(268, 17);
+            this.checkBoxWarnMissingField.TabIndex = 17;
+            this.checkBoxWarnMissingField.Text = "&Warn when a referenced custom field is missing";
+            this.checkBoxWarnMissingField.UseVisualStyleBackColor = true;
+            //
             // Options
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(543, 478);
@@ -406,5 +420,6 @@
         private System.Windows.Forms.Label labelRDPConnectionParameter;
         private System.Windows.Forms.Label labelRDPInfo;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.CheckBox checkBoxWarnMissingField;
     }
 }

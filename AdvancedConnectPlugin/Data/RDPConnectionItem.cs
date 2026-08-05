@@ -61,20 +61,26 @@ namespace AdvancedConnectPlugin.Data
                     {
                         Thread.CurrentThread.IsBackground = true; //Background threads will stop automatically on program close
 
-                        //Fill placeholders in options and start programm (cmdkey sets the rdp credentials)
-                        StartProcess.Start(RDPConnectionItem.pathToCMDKey, fillPlaceholders(buildAddingCmdkeyParameter()));
+                        //Fill placeholders in all parameters first, so removed field references can be reported once
+                        String addCredentialParameter = fillPlaceholders(buildAddingCmdkeyParameter());
+                        String remoteDesktopParameter = fillPlaceholders(buildRDPParameter());
+                        String removeCredentialParameter = fillPlaceholders(buildRemovingCmdkeyParameter());
+                        showMissingFieldWarning();
+
+                        //Start programm (cmdkey sets the rdp credentials)
+                        StartProcess.Start(RDPConnectionItem.pathToCMDKey, addCredentialParameter);
 
                         //Wait before RDP start
                         Thread.Sleep(TimeSpan.FromMilliseconds(500));
 
-                        //Fill placeholders in options and start remote desktop with thread delay
-                        StartProcess.Start(RDPConnectionItem.pathToRemoteDesktop, fillPlaceholders(buildRDPParameter()));
+                        //Start remote desktop with thread delay
+                        StartProcess.Start(RDPConnectionItem.pathToRemoteDesktop, remoteDesktopParameter);
 
                         //Wait before credential remove
                         Thread.Sleep(TimeSpan.FromMilliseconds(5000));
 
-                        //Fill placeholders in options and start programm with thread delay(cmdkey removes the previous set rdp credentials)
-                        StartProcess.Start(RDPConnectionItem.pathToCMDKey, fillPlaceholders(buildRemovingCmdkeyParameter()));
+                        //Start programm with thread delay (cmdkey removes the previous set rdp credentials)
+                        StartProcess.Start(RDPConnectionItem.pathToCMDKey, removeCredentialParameter);
                     }).Start();
 
                     return true;

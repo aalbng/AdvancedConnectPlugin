@@ -50,8 +50,13 @@ namespace AdvancedConnectPlugin.Data
                 {
                     Thread.CurrentThread.IsBackground = true; //Background threads will stop automatically on program close
                     
-                    //Fill placeholders in options and start programm
-                    StartProcess.Start(fillPlaceholders(this.application.path), fillPlaceholders(this.customConnectionOptions));
+                    //Fill placeholders in path and options first, so removed field references can be reported once
+                    String resolvedPath = fillPlaceholders(this.application.path);
+                    String resolvedOptions = fillPlaceholders(this.customConnectionOptions);
+                    showMissingFieldWarning();
+
+                    //Start programm
+                    StartProcess.Start(resolvedPath, resolvedOptions);
                 }).Start();
 
 

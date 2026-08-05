@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace AdvancedConnectPlugin.Data
 {
@@ -31,6 +32,11 @@ namespace AdvancedConnectPlugin.Data
         //(for example "find . -exec rm {} \;" or json fragments), which must not be touched.
         private static readonly Regex unresolvedFieldPlaceholder =
             new Regex(@"\{S:[^}]*\}", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+
+        //Collects the references removed while resolving one connection start. fillPlaceholders is
+        //called several times per start (path, options, and three times for rdp), so the warning is
+        //reported once for the whole start instead of once per call.
+        private readonly List<String> removedFieldReferences = new List<String>();
 
 
         /**
@@ -49,12 +55,72 @@ namespace AdvancedConnectPlugin.Data
             resolvedPathOrOptions = SprEngine.Compile(applicationOptions, replaceContext);
 
             //Drop custom field references that could not be resolved (missing or misspelled field)
-            resolvedPathOrOptions = unresolvedFieldPlaceholder.Replace(resolvedPathOrOptions, String.Empty);
+            //and remember them, so the user can be told about it once the start is prepared
+            resolvedPathOrOptions = unresolvedFieldPlaceholder.Replace(resolvedPathOrOptions, delegate(Match removedReference)
+            {
+                if (!this.removedFieldReferences.Contains(removedReference.Value))
+                {
+                    this.removedFieldReferences.Add(removedReference.Value);
+                }
+                return String.Empty;
+            });
 
             //Resolv OS variables
             resolvedPathOrOptions = Environment.ExpandEnvironmentVariables(resolvedPathOrOptions);
 
             return resolvedPathOrOptions;
+        }
+
+        /**
+         * Tells the user which custom field references were removed, unless the warning is switched
+         * off in the options. Called after all placeholders of one start have been resolved and
+         * before the application is launched. Runs on a background thread, so the dialog is
+         * marshalled onto the user interface thread and nothing is allowed to escape.
+         */
+        protected void showMissingFieldWarning()
+        {
+            try
+            {
+                if (this.removedFieldReferences.Count == 0) { return; }
+                if (this.plugin == null || this.plugin.settings == null) { return; }
+                if (!this.plugin.settings.warnOnMissingFieldReference) { this.removedFieldReferences.Clear(); return; }
+
+                StringBuilder warning = new StringBuilder();
+                warning.Append("The following custom fields do not exist on this entry and were removed from the command line:");
+                warning.Append(Environment.NewLine);
+                foreach (String removedReference in this.removedFieldReferences)
+                {
+                    warning.Append(Environment.NewLine);
+                    warning.Append("    ");
+                    warning.Append(removedReference);
+                }
+                warning.Append(Environment.NewLine);
+                warning.Append(Environment.NewLine);
+                warning.Append("You can switch this warning off in the AdvancedConnect options.");
+
+                Form mainWindow = (this.plugin.keepassHost != null) ? this.plugin.keepassHost.MainWindow : null;
+                MethodInvoker showMessage = delegate
+                {
+                    MessageBox.Show(warning.ToString(), "AdvancedConnect", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                };
+
+                if (mainWindow != null && mainWindow.IsHandleCreated && mainWindow.InvokeRequired)
+                {
+                    mainWindow.Invoke(showMessage);
+                }
+                else
+                {
+                    showMessage();
+                }
+            }
+            catch (Exception)
+            {
+                //Warning the user must never take KeePass down; deliberately ignored
+            }
+            finally
+            {
+                this.removedFieldReferences.Clear();
+            }
         }
 
     }

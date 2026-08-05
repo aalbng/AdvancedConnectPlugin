@@ -42,6 +42,11 @@ namespace AdvancedConnectPlugin.Data
         [XmlElement(ElementName = "RDPCustomParameter")]
         public String rdpCustomParameter = String.Empty;
 
+        //Defaults to true, so configuration files written by earlier versions (which do not contain
+        //this element) keep the warning enabled without needing a migration
+        [XmlElement(ElementName = "WarnOnMissingFieldReference")]
+        public Boolean warnOnMissingFieldReference = true;
+
         [XmlArray("ApplicationList"),XmlArrayItem(Type = typeof(ApplicationItem))]
         public SortableBindingList<ApplicationItem> applicationsBindingList = new SortableBindingList<ApplicationItem>();
 

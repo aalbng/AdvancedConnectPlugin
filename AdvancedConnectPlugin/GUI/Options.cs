@@ -49,7 +49,8 @@ namespace AdvancedConnectPlugin.GUI
             this.comboBoxRDPConncectionAddress.Text = plugin.settings.rdpConnectionAddressField;
             this.textBoxRDPConnectionMethod.Text = plugin.settings.rdpConnectionMethod;
             this.textBoxRDPCustomParameter.Text = plugin.settings.rdpCustomParameter;
-            
+            this.checkBoxWarnMissingField.Checked = plugin.settings.warnOnMissingFieldReference;
+
             //Check if database is open to load the custom values from db
             //(Lock configuration items if databse is closed)
             if (this.plugin.keepassHost.Database !=null && this.plugin.keepassHost.Database.IsOpen)
@@ -131,6 +132,7 @@ namespace AdvancedConnectPlugin.GUI
             this.plugin.settings.rdpConnectionAddressField = this.comboBoxRDPConncectionAddress.Text;
             this.plugin.settings.rdpConnectionMethod = this.textBoxRDPConnectionMethod.Text;
             this.plugin.settings.rdpCustomParameter = this.textBoxRDPCustomParameter.Text;
+            this.plugin.settings.warnOnMissingFieldReference = this.checkBoxWarnMissingField.Checked;
 
 
             //Write settings to settings file
