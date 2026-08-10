@@ -49,9 +49,17 @@ namespace AdvancedConnectPlugin.Data
                 new Thread(() =>
                 {
                     Thread.CurrentThread.IsBackground = true; //Background threads will stop automatically on program close
-                    
-                    //Fill placeholders in options and start programm
-                    StartProcess.Start(fillPlaceholders(this.application.path), fillPlaceholders(this.customConnectionOptions));
+
+                    try
+                    {
+                        //Fill placeholders in options and start programm
+                        StartProcess.Start(fillPlaceholders(this.application.path), fillPlaceholders(this.customConnectionOptions));
+                    }
+                    catch (Exception startException)
+                    {
+                        //An unhandled exception on this thread would terminate KeePass
+                        showStartError(this.application.path, startException);
+                    }
                 }).Start();
 
 

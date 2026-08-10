@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace AdvancedConnectPlugin.Data
 {
@@ -55,6 +56,44 @@ namespace AdvancedConnectPlugin.Data
             resolvedPathOrOptions = Environment.ExpandEnvironmentVariables(resolvedPathOrOptions);
 
             return resolvedPathOrOptions;
+        }
+
+        /**
+         * Reports a failed application start to the user.
+         * Connections are started on a background thread, where an unhandled exception
+         * would terminate the whole KeePass process, so nothing may escape from here.
+         */
+        protected void showStartError(String applicationPath, Exception startException)
+        {
+            try
+            {
+                //Resolve the KeePass main window to marshal the message box onto the UI thread
+                Form mainWindow = null;
+                if (this.plugin != null && this.plugin.keepassHost != null)
+                {
+                    mainWindow = this.plugin.keepassHost.MainWindow;
+                }
+
+                MethodInvoker showMessage = delegate
+                {
+                    MessageBox.Show(("Application '" + applicationPath + "' could not be started."
+                        + Environment.NewLine + Environment.NewLine + startException.Message),
+                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                };
+
+                if (mainWindow != null && mainWindow.IsHandleCreated && mainWindow.InvokeRequired)
+                {
+                    mainWindow.Invoke(showMessage);
+                }
+                else
+                {
+                    showMessage();
+                }
+            }
+            catch (Exception)
+            {
+                //Reporting a failure must never take KeePass down; deliberately ignored
+            }
         }
 
     }
