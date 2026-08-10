@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace AdvancedConnectPlugin.Data
@@ -26,9 +27,16 @@ namespace AdvancedConnectPlugin.Data
         protected PwDatabase keepassDatabase = null;
         protected PwEntry keepassEntry = null;
 
+        //Matches keepass custom field references ({S:Name}) the compiling engine could not resolve.
+        //Deliberately limited to that form, because command lines legitimately contain other braces
+        //(for example "find . -exec rm {} \;" or json fragments), which must not be touched.
+        private static readonly Regex unresolvedFieldPlaceholder =
+            new Regex(@"\{S:[^}]*\}", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+
 
         /**
-         * Replaces all placeholders with keepass compiling engine and replace os environment variables
+         * Replaces all placeholders with keepass compiling engine and replace os environment variables.
+         * Custom field references that stay unresolved are removed instead of being passed on literally.
          */
         protected String fillPlaceholders(String applicationOptions)
         {
@@ -40,6 +48,9 @@ namespace AdvancedConnectPlugin.Data
             SprCompileFlags compileFlags = SprCompileFlags.All; // Which placeholders should be replaced
             SprContext replaceContext = new SprContext(this.keepassEntry, this.keepassDatabase, compileFlags, encodeAsAutoType, encodeQuotesForCommandline);
             resolvedPathOrOptions = SprEngine.Compile(applicationOptions, replaceContext);
+
+            //Drop custom field references that could not be resolved (missing or misspelled field)
+            resolvedPathOrOptions = unresolvedFieldPlaceholder.Replace(resolvedPathOrOptions, String.Empty);
 
             //Resolv OS variables
             resolvedPathOrOptions = Environment.ExpandEnvironmentVariables(resolvedPathOrOptions);
