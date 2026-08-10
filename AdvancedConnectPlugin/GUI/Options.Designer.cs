@@ -54,6 +54,8 @@
             this.labelRDPConnectionParameter = new System.Windows.Forms.Label();
             this.labelRDPInfo = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.checkBoxSuppressUnresolvedFieldWarning = new System.Windows.Forms.CheckBox();
+            this.labelSuppressUnresolvedFieldWarning = new System.Windows.Forms.Label();
             this.tabControl.SuspendLayout();
             this.tabPageMain.SuspendLayout();
             this.groupBoxFieldMappings.SuspendLayout();
@@ -94,6 +96,8 @@
             this.groupBoxFieldMappings.Controls.Add(this.label1);
             this.groupBoxFieldMappings.Controls.Add(this.labelRDPInfo);
             this.groupBoxFieldMappings.Controls.Add(this.labelRDPConnectionParameter);
+            this.groupBoxFieldMappings.Controls.Add(this.checkBoxSuppressUnresolvedFieldWarning);
+            this.groupBoxFieldMappings.Controls.Add(this.labelSuppressUnresolvedFieldWarning);
             this.groupBoxFieldMappings.Controls.Add(this.textBoxRDPConnectionMethod);
             this.groupBoxFieldMappings.Controls.Add(this.labelRDPConncectionMethod);
             this.groupBoxFieldMappings.Controls.Add(this.textBoxRDPCustomParameter);
@@ -354,6 +358,24 @@
             this.label1.Size = new System.Drawing.Size(484, 2);
             this.label1.TabIndex = 16;
             // 
+            // labelSuppressUnresolvedFieldWarning
+            // 
+            this.labelSuppressUnresolvedFieldWarning.AutoSize = true;
+            this.labelSuppressUnresolvedFieldWarning.Location = new System.Drawing.Point(7, 258);
+            this.labelSuppressUnresolvedFieldWarning.Name = "labelSuppressUnresolvedFieldWarning";
+            this.labelSuppressUnresolvedFieldWarning.Size = new System.Drawing.Size(144, 13);
+            this.labelSuppressUnresolvedFieldWarning.TabIndex = 17;
+            this.labelSuppressUnresolvedFieldWarning.Text = "No unresolved field warning";
+            // 
+            // checkBoxSuppressUnresolvedFieldWarning
+            // 
+            this.checkBoxSuppressUnresolvedFieldWarning.AutoSize = true;
+            this.checkBoxSuppressUnresolvedFieldWarning.Location = new System.Drawing.Point(157, 258);
+            this.checkBoxSuppressUnresolvedFieldWarning.Name = "checkBoxSuppressUnresolvedFieldWarning";
+            this.checkBoxSuppressUnresolvedFieldWarning.Size = new System.Drawing.Size(15, 14);
+            this.checkBoxSuppressUnresolvedFieldWarning.TabIndex = 18;
+            this.checkBoxSuppressUnresolvedFieldWarning.UseVisualStyleBackColor = true;
+            // 
             // Options
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -406,5 +428,7 @@
         private System.Windows.Forms.Label labelRDPConnectionParameter;
         private System.Windows.Forms.Label labelRDPInfo;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.CheckBox checkBoxSuppressUnresolvedFieldWarning;
+        private System.Windows.Forms.Label labelSuppressUnresolvedFieldWarning;
     }
 }

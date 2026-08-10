@@ -49,6 +49,7 @@ namespace AdvancedConnectPlugin.GUI
             this.comboBoxRDPConncectionAddress.Text = plugin.settings.rdpConnectionAddressField;
             this.textBoxRDPConnectionMethod.Text = plugin.settings.rdpConnectionMethod;
             this.textBoxRDPCustomParameter.Text = plugin.settings.rdpCustomParameter;
+            this.checkBoxSuppressUnresolvedFieldWarning.Checked = plugin.settings.suppressUnresolvedFieldWarning;
             
             //Check if database is open to load the custom values from db
             //(Lock configuration items if databse is closed)
@@ -131,6 +132,7 @@ namespace AdvancedConnectPlugin.GUI
             this.plugin.settings.rdpConnectionAddressField = this.comboBoxRDPConncectionAddress.Text;
             this.plugin.settings.rdpConnectionMethod = this.textBoxRDPConnectionMethod.Text;
             this.plugin.settings.rdpCustomParameter = this.textBoxRDPCustomParameter.Text;
+            this.plugin.settings.suppressUnresolvedFieldWarning = this.checkBoxSuppressUnresolvedFieldWarning.Checked;
 
 
             //Write settings to settings file

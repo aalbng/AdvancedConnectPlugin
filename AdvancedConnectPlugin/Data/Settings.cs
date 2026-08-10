@@ -33,6 +33,9 @@ namespace AdvancedConnectPlugin.Data
         [XmlElement(ElementName = "ConnectionOptionsField")]
         public String connectionOptionsField = String.Empty;
 
+        [XmlElement(ElementName = "SuppressUnresolvedFieldWarning")]
+        public Boolean suppressUnresolvedFieldWarning = false;
+
         [XmlElement(ElementName = "EnableBuiltinRDP")]
         public Boolean enableBuiltinRDP = true;
         [XmlElement(ElementName = "RDPConnectionAddressField")]

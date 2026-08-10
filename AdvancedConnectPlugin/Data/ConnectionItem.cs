@@ -49,16 +49,19 @@ namespace AdvancedConnectPlugin.Data
             SprContext replaceContext = new SprContext(this.keepassEntry, this.keepassDatabase, compileFlags, encodeAsAutoType, encodeQuotesForCommandline);
             resolvedPathOrOptions = SprEngine.Compile(applicationOptions, replaceContext);
 
-            //Check for unresolved custom field references and warn the user
-            MatchCollection unresolvedMatches = unresolvedFieldPlaceholder.Matches(resolvedPathOrOptions);
-            if (unresolvedMatches.Count > 0)
+            //Check for unresolved custom field references and warn the user (unless suppressed in settings)
+            if (this.plugin == null || this.plugin.settings == null || !this.plugin.settings.suppressUnresolvedFieldWarning)
             {
-                List<String> fieldNames = new List<String>();
-                foreach (Match match in unresolvedMatches)
+                MatchCollection unresolvedMatches = unresolvedFieldPlaceholder.Matches(resolvedPathOrOptions);
+                if (unresolvedMatches.Count > 0)
                 {
-                    fieldNames.Add(match.Value);
+                    List<String> fieldNames = new List<String>();
+                    foreach (Match match in unresolvedMatches)
+                    {
+                        fieldNames.Add(match.Value);
+                    }
+                    showUnresolvedFieldWarning(fieldNames);
                 }
-                showUnresolvedFieldWarning(fieldNames);
             }
 
             //Drop custom field references that could not be resolved (missing or misspelled field)
