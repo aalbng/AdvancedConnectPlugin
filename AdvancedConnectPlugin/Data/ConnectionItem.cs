@@ -49,6 +49,18 @@ namespace AdvancedConnectPlugin.Data
             SprContext replaceContext = new SprContext(this.keepassEntry, this.keepassDatabase, compileFlags, encodeAsAutoType, encodeQuotesForCommandline);
             resolvedPathOrOptions = SprEngine.Compile(applicationOptions, replaceContext);
 
+            //Check for unresolved custom field references and warn the user
+            MatchCollection unresolvedMatches = unresolvedFieldPlaceholder.Matches(resolvedPathOrOptions);
+            if (unresolvedMatches.Count > 0)
+            {
+                List<String> fieldNames = new List<String>();
+                foreach (Match match in unresolvedMatches)
+                {
+                    fieldNames.Add(match.Value);
+                }
+                showUnresolvedFieldWarning(fieldNames);
+            }
+
             //Drop custom field references that could not be resolved (missing or misspelled field)
             resolvedPathOrOptions = unresolvedFieldPlaceholder.Replace(resolvedPathOrOptions, String.Empty);
 
@@ -56,6 +68,65 @@ namespace AdvancedConnectPlugin.Data
             resolvedPathOrOptions = Environment.ExpandEnvironmentVariables(resolvedPathOrOptions);
 
             return resolvedPathOrOptions;
+        }
+
+        /**
+         * Shows a warning about unresolved custom field references.
+         * Must be called from background thread, so it marshals to the UI thread.
+         */
+        protected void showUnresolvedFieldWarning(List<String> unresolvedFields)
+        {
+            try
+            {
+                //Resolve the KeePass main window to marshal the message box onto the UI thread
+                Form mainWindow = null;
+                if (this.plugin != null && this.plugin.keepassHost != null)
+                {
+                    mainWindow = this.plugin.keepassHost.MainWindow;
+                }
+
+                //Build a short list of unresolved fields (max 5)
+                String fieldList = String.Empty;
+                int displayCount = Math.Min(unresolvedFields.Count, 5);
+                for (int i = 0; i < displayCount; i++)
+                {
+                    fieldList += unresolvedFields[i];
+                    if (i < displayCount - 1)
+                    {
+                        fieldList += ", ";
+                    }
+                }
+                if (unresolvedFields.Count > 5)
+                {
+                    fieldList += "...";
+                }
+
+                MethodInvoker showMessage = delegate
+                {
+                    MessageBox.Show(
+                        "The following custom field(s) could not be resolved and will be removed:"
+                        + Environment.NewLine + Environment.NewLine
+                        + fieldList
+                        + Environment.NewLine + Environment.NewLine
+                        + "Please check your custom field names.",
+                        "Warning - Unresolved Fields",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                };
+
+                if (mainWindow != null && mainWindow.IsHandleCreated && mainWindow.InvokeRequired)
+                {
+                    mainWindow.Invoke(showMessage);
+                }
+                else
+                {
+                    showMessage();
+                }
+            }
+            catch (Exception)
+            {
+                //Showing a warning must never take KeePass down; deliberately ignored
+            }
         }
 
         /**
