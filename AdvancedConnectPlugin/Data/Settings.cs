@@ -48,7 +48,7 @@ namespace AdvancedConnectPlugin.Data
         //Milliseconds to keep the temporary RDP credential available after mstsc signals it is
         //ready (used as a safety buffer before the credential is removed again).
         [XmlElement(ElementName = "RDPCredentialCleanupDelay")]
-        public Int32 rdpCredentialCleanupDelay = 2000;
+        public Int32 rdpCredentialCleanupDelay = 5000;
 
         [XmlArray("ApplicationList"),XmlArrayItem(Type = typeof(ApplicationItem))]
         public SortableBindingList<ApplicationItem> applicationsBindingList = new SortableBindingList<ApplicationItem>();
