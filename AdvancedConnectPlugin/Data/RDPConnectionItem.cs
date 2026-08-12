@@ -23,7 +23,7 @@ namespace AdvancedConnectPlugin.Data
 {
     public class RDPConnectionItem : ConnectionItem
     {
-        public static String pathToRemoteDesktop = "C:\\Windows\\System32\\mstsc.exe";
+        public static String pathToRemoteDesktop = "%SystemRoot%\\System32\\mstsc.exe";
 
         //Maximum time (ms) to wait for mstsc to become ready before falling back to the safety buffer
         private const Int32 waitForReadyTimeout = 15000;
@@ -90,7 +90,7 @@ namespace AdvancedConnectPlugin.Data
 
                         //Start remote desktop with the already resolved address (avoids a second placeholder resolution)
                         using (System.Diagnostics.Process rdpProcess =
-                            StartProcess.Start(RDPConnectionItem.pathToRemoteDesktop, buildRDPParameter(resolvedRdpAddress)))
+                            StartProcess.Start(Environment.ExpandEnvironmentVariables(RDPConnectionItem.pathToRemoteDesktop), buildRDPParameter(resolvedRdpAddress)))
                         {
                             try
                             {

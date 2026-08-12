@@ -6,6 +6,7 @@
 - Upgrade target framework to .NET Framework 3.5 (KeePass 2.59+)
 - Enlarged Main settings tab and Options window
 - Remove obsolete "Remote Desktop (Console)" connection option
+- Resolve mstsc.exe via %SystemRoot% instead of a hardcoded path
 
 1.0.8
 Change variable handling
