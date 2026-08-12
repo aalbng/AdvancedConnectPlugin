@@ -44,17 +44,21 @@ namespace AdvancedConnectPlugin.Data
                 {
                     this.customConnectionOptions = this.keepassEntry.Strings.ReadSafe(this.plugin.settings.connectionOptionsField);
                 }
-                
-                //Create a thread to allow non gui blocking sleeps
-                new Thread(() =>
-                {
-                    Thread.CurrentThread.IsBackground = true; //Background threads will stop automatically on program close
 
+                //Snapshot the values the background thread needs on the calling (UI) thread, so the thread
+                //works on an immutable copy and never reads shared/mutable state without synchronization.
+                //Placeholder resolution stays inside the thread to keep the exact previous timing/behaviour.
+                String applicationPath = this.application.path;
+                String applicationOptions = this.customConnectionOptions;
+
+                //Create a thread to allow non gui blocking sleeps
+                Thread connectionThread = new Thread(() =>
+                {
                     try
                     {
                         //Fill placeholders in options and start programm
                         using (System.Diagnostics.Process process =
-                            StartProcess.Start(fillPlaceholders(this.application.path), fillPlaceholders(this.customConnectionOptions)))
+                            StartProcess.Start(fillPlaceholders(applicationPath), fillPlaceholders(applicationOptions)))
                         {
                             //The process runs independently; the handle is only disposed here
                         }
@@ -62,9 +66,12 @@ namespace AdvancedConnectPlugin.Data
                     catch (Exception startException)
                     {
                         //An unhandled exception on this thread would terminate KeePass
-                        showStartError(this.application.path, startException);
+                        showStartError(applicationPath, startException);
                     }
-                }).Start();
+                });
+                connectionThread.IsBackground = true; //Set before Start() so there is no foreground-thread window
+                connectionThread.Name = "AdvancedConnect-CustomApp";
+                connectionThread.Start();
 
 
                 return true;

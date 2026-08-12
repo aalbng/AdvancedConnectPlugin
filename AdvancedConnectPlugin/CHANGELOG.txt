@@ -11,6 +11,7 @@
 - More robust executable directory resolution (UNC/network share safe, no crash when the entry assembly is unavailable)
 - Fail-fast plugin loading: report load errors (including a missing embedded icon) via a clear message and abort cleanly; null-safe Terminate()
 - Show the concrete reason when saving the configuration fails and keep the Options dialog open on save errors
+- Connection start threads now work on an immutable snapshot of their input (no shared mutable state), set IsBackground before start
 
 1.0.8
 Change variable handling

@@ -29,7 +29,6 @@ namespace AdvancedConnectPlugin.Data
         private const Int32 waitForReadyTimeout = 15000;
 
         private String rdpCustomParameter = String.Empty;
-        private String rdpParameter = String.Empty;
 
 
         public RDPConnectionItem(AdvancedConnectPluginExt plugin, PwEntry keepassEntry)
@@ -78,11 +77,14 @@ namespace AdvancedConnectPlugin.Data
                     credentialCleanupDelay = 2000;
                 }
 
-                //Create a thread to allow non gui blocking waits
-                new Thread(() =>
-                {
-                    Thread.CurrentThread.IsBackground = true; //Background threads will stop automatically on program close
+                //Snapshot the values the background thread needs on the calling (UI) thread, so the thread
+                //works on an immutable copy and never reads/writes shared instance state without synchronization.
+                //Placeholder resolution stays inside the thread to keep the exact previous timing/behaviour.
+                String customParameter = this.rdpCustomParameter;
 
+                //Create a thread to allow non gui blocking waits
+                Thread connectionThread = new Thread(() =>
+                {
                     try
                     {
                         //Store the rdp credentials securely through the Windows Credential Manager API
@@ -90,7 +92,7 @@ namespace AdvancedConnectPlugin.Data
 
                         //Start remote desktop with the already resolved address (avoids a second placeholder resolution)
                         using (System.Diagnostics.Process rdpProcess =
-                            StartProcess.Start(Environment.ExpandEnvironmentVariables(RDPConnectionItem.pathToRemoteDesktop), buildRDPParameter(resolvedRdpAddress)))
+                            StartProcess.Start(Environment.ExpandEnvironmentVariables(RDPConnectionItem.pathToRemoteDesktop), buildRDPParameter(resolvedRdpAddress, customParameter)))
                         {
                             try
                             {
@@ -122,7 +124,10 @@ namespace AdvancedConnectPlugin.Data
                         try { WindowsCredentialManager.Remove(credentialTarget); }
                         catch (Exception) { }
                     }
-                }).Start();
+                });
+                connectionThread.IsBackground = true; //Set before Start() so there is no foreground-thread window
+                connectionThread.Name = "AdvancedConnect-RDP";
+                connectionThread.Start();
 
                 return true;
             }
@@ -134,12 +139,11 @@ namespace AdvancedConnectPlugin.Data
 
         }
 
-        private String buildRDPParameter(String resolvedRdpAddress)
+        private String buildRDPParameter(String resolvedRdpAddress, String customParameter)
         {
-            this.rdpParameter = "/v:" + resolvedRdpAddress;
-            //Custom parameter may still contain placeholders that need resolving
-            this.rdpParameter = this.rdpParameter + " " + fillPlaceholders(this.rdpCustomParameter);
-            return this.rdpParameter;
+            //Build from the passed-in snapshot only, so no shared instance state is written from the thread.
+            //Custom parameter may still contain placeholders that need resolving.
+            return "/v:" + resolvedRdpAddress + " " + fillPlaceholders(customParameter);
         }
 
     }
