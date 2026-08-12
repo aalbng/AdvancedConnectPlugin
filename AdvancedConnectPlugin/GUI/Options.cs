@@ -126,6 +126,14 @@ namespace AdvancedConnectPlugin.GUI
 
         private void buttonApply_Click(object sender, EventArgs e)
         {
+            //Event handler kept with the designer-expected signature; the result is only needed by OK.
+            this.applySettings();
+        }
+
+        //Writes the dialog values into the settings and persists them.
+        //Returns false (and shows the concrete reason) if saving the configuration failed.
+        private bool applySettings()
+        {
             //Write fields into settings;
             this.plugin.settings.connectionMethodField = this.comboBoxConnectionMethod.Text;
             this.plugin.settings.connectionOptionsField = this.comboBoxConncectionOptions.Text;
@@ -150,16 +158,26 @@ namespace AdvancedConnectPlugin.GUI
 
 
             //Write settings to settings file
-            if (this.plugin.settings.save() == false)
+            String saveErrorMessage;
+            if (this.plugin.settings.save(out saveErrorMessage) == false)
             {
-                MessageBox.Show(("Configuration " + this.plugin.pathToPluginConfigFile + " could not be written." ), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }         
+                MessageBox.Show(
+                    "Configuration '" + this.plugin.pathToPluginConfigFile + "' could not be written."
+                    + Environment.NewLine + Environment.NewLine + saveErrorMessage,
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            return true;
         }
 
         private void buttonOK_Click(object sender, EventArgs e)
         {
-            this.buttonApply_Click(sender, e);
-            this.Close();
+            //Only close the dialog if the configuration was saved successfully, so a save error stays visible.
+            if (this.applySettings())
+            {
+                this.Close();
+            }
         }
 
         private void buttonApplicationRemove_Click(object sender, EventArgs e)

@@ -96,8 +96,10 @@ namespace AdvancedConnectPlugin.Data
             return loadedSettings;
         }
 
-        public bool save()
+        public bool save(out String errorMessage)
         {
+            errorMessage = String.Empty;
+
             try
             {
                 XmlSerializer serializerObj = new XmlSerializer(typeof(Settings));
@@ -106,8 +108,10 @@ namespace AdvancedConnectPlugin.Data
                     serializerObj.Serialize(writeFileStream, this);
                 }
             }
-            catch (Exception)
+            catch (Exception saveException)
             {
+                //Surface the concrete reason (access denied, path not found, ...) to the caller.
+                errorMessage = saveException.Message;
                 return false;
             }
 
