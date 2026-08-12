@@ -14,8 +14,6 @@ using KeePass.Util.Spr;
 using KeePassLib;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 

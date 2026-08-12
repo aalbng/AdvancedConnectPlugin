@@ -13,9 +13,6 @@ See the License for the specific language governing permissions and limitations 
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 namespace AdvancedConnectPlugin.GUI

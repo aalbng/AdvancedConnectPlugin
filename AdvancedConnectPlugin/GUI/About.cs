@@ -11,12 +11,7 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 */
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Reflection;
-using System.Text;
 using System.Windows.Forms;
 
 namespace AdvancedConnectPlugin.GUI

@@ -13,7 +13,6 @@ See the License for the specific language governing permissions and limitations 
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
 
 namespace AdvancedConnectPlugin.Tools
 {

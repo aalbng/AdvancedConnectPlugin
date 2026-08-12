@@ -11,13 +11,8 @@ distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, e
 See the License for the specific language governing permissions and limitations under the License.
 */
 using AdvancedConnectPlugin.Tools;
-using KeePass.Plugins;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
-using System.Text;
-using System.Windows.Forms;
 using System.Xml.Serialization;
 
 namespace AdvancedConnectPlugin.Data

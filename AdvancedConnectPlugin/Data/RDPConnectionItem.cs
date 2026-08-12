@@ -13,10 +13,7 @@ See the License for the specific language governing permissions and limitations 
 using AdvancedConnectPlugin.Tools;
 using KeePassLib;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Text;
 using System.Threading;
 
 namespace AdvancedConnectPlugin.Data
