@@ -70,23 +70,21 @@ namespace AdvancedConnectPlugin.Data
             if (File.Exists(this.plugin.pathToPluginConfigFile))
             {
                 XmlSerializer serializerObj = new XmlSerializer(typeof(Settings));
-                FileStream readFileStream = new FileStream(this.plugin.pathToPluginConfigFile, FileMode.Open, FileAccess.Read, FileShare.Read);
 
                 //Try to parse settings from configuration file. Create new configuration on parsing error
                 try
                 {
-                    //Load configuration
-                    loadedSettings = (Settings)serializerObj.Deserialize(readFileStream);
+                    using (FileStream readFileStream = new FileStream(this.plugin.pathToPluginConfigFile, FileMode.Open, FileAccess.Read, FileShare.Read))
+                    {
+                        //Load configuration
+                        loadedSettings = (Settings)serializerObj.Deserialize(readFileStream);
+                    }
                 }
                 catch (InvalidOperationException)
                 {
                     //Create new configuration on error
                     loadedSettings = new Settings();
                 }
-                finally
-                {
-                    readFileStream.Close();
-                }                                          
             }
             else
             {
@@ -103,9 +101,10 @@ namespace AdvancedConnectPlugin.Data
             try
             {
                 XmlSerializer serializerObj = new XmlSerializer(typeof(Settings));
-                TextWriter writeFileStream = new StreamWriter(this.plugin.pathToPluginConfigFile);
-                serializerObj.Serialize(writeFileStream, this);
-                writeFileStream.Close();
+                using (TextWriter writeFileStream = new StreamWriter(this.plugin.pathToPluginConfigFile))
+                {
+                    serializerObj.Serialize(writeFileStream, this);
+                }
             }
             catch (Exception)
             {

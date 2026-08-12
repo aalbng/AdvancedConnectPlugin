@@ -7,6 +7,7 @@
 - Enlarged Main settings tab and Options window
 - Remove obsolete "Remote Desktop (Console)" connection option
 - Resolve mstsc.exe via %SystemRoot% instead of a hardcoded path
+- Robust settings file handling: wrap file streams in using blocks to guarantee handle release
 
 1.0.8
 Change variable handling
