@@ -9,6 +9,7 @@
 - Resolve mstsc.exe via %SystemRoot% instead of a hardcoded path
 - Robust settings file handling: wrap file streams in using blocks to guarantee handle release
 - More robust executable directory resolution (UNC/network share safe, no crash when the entry assembly is unavailable)
+- Fail-fast plugin loading: report load errors (including a missing embedded icon) via a clear message and abort cleanly; null-safe Terminate()
 
 1.0.8
 Change variable handling

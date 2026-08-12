@@ -16,6 +16,7 @@ using System;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
+using System.Windows.Forms;
 
 namespace AdvancedConnectPlugin
 {
@@ -35,30 +36,70 @@ namespace AdvancedConnectPlugin
             //Reference KeePass main application object
             this.keepassHost = keepassHost;
 
-            //Load embedded icon
-            System.Reflection.Assembly pluginAssembly = System.Reflection.Assembly.GetExecutingAssembly();
-            this.pluginIcon = new Icon(pluginAssembly.GetManifestResourceStream(pluginAssembly.GetName().Name + ".Icon.ico"));
-            
-            //Load\Create Config 
-            buildConfigPath();
-            settings = new Data.Settings(this);
-            settings = this.settings.load();
-                        
-            //Extend Tools Menu (Options window)
-            this.toolsMenuExtension = new GUI.ToolsMenuExtension(this);
-            this.toolsMenuExtension.extendToolsMenu();
+            //Loading problems must be surfaced to the user (not silently swallowed) and must abort the
+            //plugin load cleanly, so KeePass does not end up with a half-initialized plugin.
+            try
+            {
+                //Load embedded icon (fail loudly if the resource is missing, because the menu and the
+                //About dialog rely on it and would otherwise crash later with a less obvious error).
+                this.pluginIcon = loadPluginIcon();
 
-            //Contextmenu extension (Add handlers)
-            this.contextMenuExtension = new GUI.ContextMenuExtension(this);
-            this.contextMenuExtension.extendEntryContextMenu();
+                //Load\Create Config 
+                buildConfigPath();
+                settings = new Data.Settings(this);
+                settings = this.settings.load();
+
+                //Extend Tools Menu (Options window)
+                this.toolsMenuExtension = new GUI.ToolsMenuExtension(this);
+                this.toolsMenuExtension.extendToolsMenu();
+
+                //Contextmenu extension (Add handlers)
+                this.contextMenuExtension = new GUI.ContextMenuExtension(this);
+                this.contextMenuExtension.extendEntryContextMenu();
+            }
+            catch (Exception initializeException)
+            {
+                //Show the concrete reason and abort the load, instead of throwing an unhandled exception
+                //(which KeePass would only report generically) or continuing in a broken state.
+                MessageBox.Show(
+                    "The Advanced Connect Plugin could not be loaded." + Environment.NewLine + Environment.NewLine
+                    + initializeException.Message,
+                    "Advanced Connect Plugin - Load Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+                return false;
+            }
 
             return true;
+        }
+
+        //Loads the embedded plugin icon. Throws a descriptive exception if the resource is missing,
+        //so a packaging/build problem becomes immediately visible instead of causing a later crash.
+        private Icon loadPluginIcon()
+        {
+            System.Reflection.Assembly pluginAssembly = System.Reflection.Assembly.GetExecutingAssembly();
+            String resourceName = pluginAssembly.GetName().Name + ".Icon.ico";
+
+            using (Stream iconStream = pluginAssembly.GetManifestResourceStream(resourceName))
+            {
+                if (iconStream == null)
+                {
+                    throw new InvalidOperationException("Embedded icon resource '" + resourceName + "' was not found.");
+                }
+
+                return new Icon(iconStream);
+            }
         }
 
         //Keepass shutdown; Unload plugin
         public override void Terminate()
         {
-            this.toolsMenuExtension.removeToolsMenuExtensions();
+            //Terminate() may be called even if Initialize() aborted early, so guard against not-yet-created members.
+            if (this.toolsMenuExtension != null)
+            {
+                this.toolsMenuExtension.removeToolsMenuExtensions();
+            }
         }
 
         //Build configuration
