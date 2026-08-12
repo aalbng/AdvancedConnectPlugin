@@ -47,6 +47,20 @@ namespace AdvancedConnectPlugin.Data
             this.options = options;
         }
 
+        //Removes any selected KeePass standard or custom icon and restores the default behaviour
+        //(fall back to the executable's own icon).
+        public void clearIcon()
+        {
+            this.iconId = NoIcon;
+            this.customIconPngBase64 = String.Empty;
+        }
+
+        //Indicates whether a KeePass standard or custom icon is currently selected.
+        public Boolean hasIcon()
+        {
+            return this.iconId != NoIcon || !String.IsNullOrEmpty(this.customIconPngBase64);
+        }
+
     }
     
 }

@@ -125,6 +125,8 @@ namespace AdvancedConnectPlugin.GUI
             //Hidden helper columns for the (non-visible) icon selection are not needed:
             //the selection lives on the ApplicationItem; the image is refreshed from there.
             this.dataGridViewApplications.CellDoubleClick += new DataGridViewCellEventHandler(dataGridViewApplications_CellDoubleClick);
+            //Right clicking the icon cell offers removing a set icon (restore the exe icon default).
+            this.dataGridViewApplications.CellMouseDown += new DataGridViewCellMouseEventHandler(dataGridViewApplications_CellMouseDown);
             this.dataGridViewApplications.RowsAdded += new DataGridViewRowsAddedEventHandler(dataGridViewApplications_RowsAdded);
             //Unbound icon cell values are cleared when a bound grid is sorted, so refresh them afterwards.
             this.dataGridViewApplications.Sorted += new EventHandler(dataGridViewApplications_Sorted);
@@ -313,6 +315,41 @@ namespace AdvancedConnectPlugin.GUI
 
             pickIconForApplication(application);
             refreshIconCell(e.RowIndex);
+        }
+
+        //Right clicking the icon cell shows a context menu to remove a set icon and restore the
+        //default behaviour (fall back to the executable's own icon).
+        private void dataGridViewApplications_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right || e.RowIndex < 0 || e.ColumnIndex < 0)
+            {
+                return;
+            }
+            if (this.dataGridViewApplications.Columns[e.ColumnIndex].Name != "icon")
+            {
+                return;
+            }
+
+            Data.ApplicationItem application = getApplicationItem(e.RowIndex);
+            if (application == null)
+            {
+                return;
+            }
+
+            int rowIndex = e.RowIndex;
+
+            ContextMenuStrip iconContextMenu = new ContextMenuStrip();
+            ToolStripMenuItem removeIconItem = new ToolStripMenuItem("Remove icon (use application icon)");
+            removeIconItem.Enabled = application.hasIcon();
+            removeIconItem.Click += delegate(object menuSender, EventArgs menuArgs)
+            {
+                application.clearIcon();
+                refreshIconCell(rowIndex);
+            };
+            iconContextMenu.Items.Add(removeIconItem);
+
+            System.Drawing.Rectangle cellRectangle = this.dataGridViewApplications.GetCellDisplayRectangle(e.ColumnIndex, e.RowIndex, false);
+            iconContextMenu.Show(this.dataGridViewApplications, cellRectangle.Left + e.X, cellRectangle.Top + e.Y);
         }
 
         //Shows the KeePass IconPickerForm and stores the chosen standard/custom icon on the application.
