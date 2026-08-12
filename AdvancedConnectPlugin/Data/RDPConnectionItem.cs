@@ -28,17 +28,15 @@ namespace AdvancedConnectPlugin.Data
         //Maximum time (ms) to wait for mstsc to become ready before falling back to the safety buffer
         private const Int32 waitForReadyTimeout = 15000;
 
-        private Boolean rdpConsoleSession = false;
         private String rdpCustomParameter = String.Empty;
         private String rdpParameter = String.Empty;
 
 
-        public RDPConnectionItem(AdvancedConnectPluginExt plugin, PwEntry keepassEntry, Boolean rdpConsoleSession)
+        public RDPConnectionItem(AdvancedConnectPluginExt plugin, PwEntry keepassEntry)
         {
             this.plugin = plugin;
             this.keepassDatabase = this.plugin.keepassHost.Database;
             this.keepassEntry = keepassEntry;
-            this.rdpConsoleSession = rdpConsoleSession;
             this.rdpCustomParameter = this.plugin.settings.rdpCustomParameter;
         }
 
@@ -139,9 +137,6 @@ namespace AdvancedConnectPlugin.Data
         private String buildRDPParameter(String resolvedRdpAddress)
         {
             this.rdpParameter = "/v:" + resolvedRdpAddress;
-            if (this.rdpConsoleSession) {
-                this.rdpParameter = this.rdpParameter + " /admin /console";
-            }
             //Custom parameter may still contain placeholders that need resolving
             this.rdpParameter = this.rdpParameter + " " + fillPlaceholders(this.rdpCustomParameter);
             return this.rdpParameter;

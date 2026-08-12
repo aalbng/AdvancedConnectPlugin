@@ -59,14 +59,7 @@ namespace AdvancedConnectPlugin.GUI
                         menuItem = new ToolStripMenuItem();
                         menuItem.Text = "Remote Desktop";
                         try { menuItem.Image = System.Drawing.Icon.ExtractAssociatedIcon(Data.RDPConnectionItem.pathToRemoteDesktop).ToBitmap(); } catch (Exception) { } //Extracts the icon from the executable and sets it as context menut item bitmap
-                        menuItem.Tag = new Data.RDPConnectionItem(this.plugin, selectedEntries[0], false); //Contains the spezific connectionitem (kpentry) object reference
-                        menuItem.Click += entryContextMenuItem_RDPApplication_Click;
-                        menuItemList.Add(menuItem);
-
-                        menuItem = new ToolStripMenuItem();
-                        menuItem.Text = "Remote Desktop (Console)";
-                        try { menuItem.Image = System.Drawing.Icon.ExtractAssociatedIcon(Data.RDPConnectionItem.pathToRemoteDesktop).ToBitmap(); } catch (Exception) { } //Extracts the icon from the executable and sets it as context menut item bitmap
-                        menuItem.Tag = new Data.RDPConnectionItem(this.plugin, selectedEntries[0], true); //Contains the spezific connectionitem (kpentry) object reference
+                        menuItem.Tag = new Data.RDPConnectionItem(this.plugin, selectedEntries[0]); //Contains the spezific connectionitem (kpentry) object reference
                         menuItem.Click += entryContextMenuItem_RDPApplication_Click;
                         menuItemList.Add(menuItem);
                     }

@@ -5,6 +5,7 @@
 - New configurable RDP credential cleanup delay (Options dialog and XML)
 - Upgrade target framework to .NET Framework 3.5 (KeePass 2.59+)
 - Enlarged Main settings tab and Options window
+- Remove obsolete "Remote Desktop (Console)" connection option
 
 1.0.8
 Change variable handling
