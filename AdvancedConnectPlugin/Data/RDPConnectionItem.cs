@@ -1,5 +1,5 @@
-﻿/*
-Copyright 2016 TGW Software Services GmbH
+/*
+Copyright 2026 Andreas Albang
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance 
 with the License. You may obtain a copy of the License at
@@ -24,11 +24,9 @@ namespace AdvancedConnectPlugin.Data
     public class RDPConnectionItem : ConnectionItem
     {
         public static String pathToRemoteDesktop = "C:\\Windows\\System32\\mstsc.exe";
-        public static String pathToCMDKey = "C:\\Windows\\System32\\cmdkey.exe";
         private Boolean rdpConsoleSession = false;
         private String rdpCustomParameter = String.Empty;
         private String rdpParameter = String.Empty;
-        private String cmdkeyParameter = String.Empty;
 
 
         public RDPConnectionItem(AdvancedConnectPluginExt plugin, PwEntry keepassEntry, Boolean rdpConsoleSession)
@@ -48,50 +46,55 @@ namespace AdvancedConnectPlugin.Data
             //Check if application path exist
             if (File.Exists(Environment.ExpandEnvironmentVariables(RDPConnectionItem.pathToRemoteDesktop)))
             {
-                if (File.Exists(Environment.ExpandEnvironmentVariables(RDPConnectionItem.pathToCMDKey)))
+                //Overwrite the default rdp parameter if set in keepass entry
+                if (this.keepassEntry.Strings.ReadSafe(this.plugin.settings.connectionOptionsField).Length > 0)
                 {
-                    //Overwrite the default rdp parameter if set in keepass entry
-                    if (this.keepassEntry.Strings.ReadSafe(this.plugin.settings.connectionOptionsField).Length > 0)
+                    this.rdpCustomParameter = this.keepassEntry.Strings.ReadSafe(this.plugin.settings.connectionOptionsField);
+                }
+
+                //Resolve the credential target host, using the same placeholder resolution mstsc receives
+                //(cmdkey/mstsc use the host without a port)
+                String resolvedRdpAddress = fillPlaceholders(this.keepassEntry.Strings.ReadSafe(this.plugin.settings.rdpConnectionAddressField));
+                String credentialTarget = "TERMSRV/" + resolvedRdpAddress.Split(':')[0];
+
+                //Resolve username and password directly, so they are never placed on a command line
+                String userName = resolveField("{USERNAME}");
+                String password = resolveField("{PASSWORD}");
+
+                //Create a thread to allow non gui blocking sleeps
+                new Thread(() =>
+                {
+                    Thread.CurrentThread.IsBackground = true; //Background threads will stop automatically on program close
+
+                    try
                     {
-                        this.rdpCustomParameter = this.keepassEntry.Strings.ReadSafe(this.plugin.settings.connectionOptionsField);
+                        //Store the rdp credentials securely through the Windows Credential Manager API
+                        WindowsCredentialManager.Store(credentialTarget, userName, password);
+
+                        //Wait before RDP start
+                        Thread.Sleep(TimeSpan.FromMilliseconds(500));
+
+                        //Start remote desktop with the already resolved address (avoids a second placeholder resolution)
+                        StartProcess.Start(RDPConnectionItem.pathToRemoteDesktop, buildRDPParameter(resolvedRdpAddress));
+
+                        //Wait before credential remove
+                        Thread.Sleep(TimeSpan.FromMilliseconds(5000));
+
+                        //Remove the previously stored rdp credentials
+                        WindowsCredentialManager.Remove(credentialTarget);
                     }
-                    
-                    //Create a thread to allow non gui blocking sleeps
-                    new Thread(() =>
+                    catch (Exception startException)
                     {
-                        Thread.CurrentThread.IsBackground = true; //Background threads will stop automatically on program close
+                        //An unhandled exception on this thread would terminate KeePass
+                        showStartError(RDPConnectionItem.pathToRemoteDesktop, startException);
 
-                        try
-                        {
-                            //Fill placeholders in options and start programm (cmdkey sets the rdp credentials)
-                            StartProcess.Start(RDPConnectionItem.pathToCMDKey, fillPlaceholders(buildAddingCmdkeyParameter()));
+                        //Best effort cleanup so no credential is left behind after a failure
+                        try { WindowsCredentialManager.Remove(credentialTarget); }
+                        catch (Exception) { }
+                    }
+                }).Start();
 
-                            //Wait before RDP start
-                            Thread.Sleep(TimeSpan.FromMilliseconds(500));
-
-                            //Fill placeholders in options and start remote desktop with thread delay
-                            StartProcess.Start(RDPConnectionItem.pathToRemoteDesktop, fillPlaceholders(buildRDPParameter()));
-
-                            //Wait before credential remove
-                            Thread.Sleep(TimeSpan.FromMilliseconds(5000));
-
-                            //Fill placeholders in options and start programm with thread delay(cmdkey removes the previous set rdp credentials)
-                            StartProcess.Start(RDPConnectionItem.pathToCMDKey, fillPlaceholders(buildRemovingCmdkeyParameter()));
-                        }
-                        catch (Exception startException)
-                        {
-                            //An unhandled exception on this thread would terminate KeePass
-                            showStartError(RDPConnectionItem.pathToRemoteDesktop, startException);
-                        }
-                    }).Start();
-
-                    return true;
-                }
-                else
-                {
-                    errorMessage = ("Application '" + RDPConnectionItem.pathToCMDKey + "' not found!");
-                    return false;
-                }
+                return true;
             }
             else
             {
@@ -101,32 +104,16 @@ namespace AdvancedConnectPlugin.Data
 
         }
 
-        private String buildRDPParameter()
+        private String buildRDPParameter(String resolvedRdpAddress)
         {
-            this.rdpParameter = "/v:" + this.keepassEntry.Strings.ReadSafe(this.plugin.settings.rdpConnectionAddressField);
+            this.rdpParameter = "/v:" + resolvedRdpAddress;
             if (this.rdpConsoleSession) {
                 this.rdpParameter = this.rdpParameter + " /admin /console";
             }
-            this.rdpParameter = this.rdpParameter + " " + this.rdpCustomParameter;
+            //Custom parameter may still contain placeholders that need resolving
+            this.rdpParameter = this.rdpParameter + " " + fillPlaceholders(this.rdpCustomParameter);
             return this.rdpParameter;
         }
-
-
-        //Creating cmdkey parameters with Keepass placeholders
-        private String buildAddingCmdkeyParameter()
-        {
-            this.cmdkeyParameter = "/generic:TERMSRV/" + this.keepassEntry.Strings.ReadSafe(this.plugin.settings.rdpConnectionAddressField).Split(':')[0]
-                + " /user:{USERNAME} /pass:{PASSWORD}";
-            return this.cmdkeyParameter;
-        }
-
-        //Creating cmdkey parameters with Keepass placeholders
-        private String buildRemovingCmdkeyParameter()
-        {
-            this.cmdkeyParameter = "/delete:TERMSRV/" + this.keepassEntry.Strings.ReadSafe(this.plugin.settings.rdpConnectionAddressField).Split(':')[0];
-            return this.cmdkeyParameter;
-        }
-
 
     }
 }

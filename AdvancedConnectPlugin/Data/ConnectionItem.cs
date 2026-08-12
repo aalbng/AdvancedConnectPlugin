@@ -1,5 +1,5 @@
-﻿/*
-Copyright 2016 TGW Software Services GmbH
+/*
+Copyright 2026 Andreas Albang
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance 
 with the License. You may obtain a copy of the License at
@@ -71,6 +71,20 @@ namespace AdvancedConnectPlugin.Data
             resolvedPathOrOptions = Environment.ExpandEnvironmentVariables(resolvedPathOrOptions);
 
             return resolvedPathOrOptions;
+        }
+
+        /**
+         * Resolves a single field value (for example "{USERNAME}" or "{PASSWORD}") through the
+         * KeePass compiling engine without command line quoting. Used to hand credentials to the
+         * Windows Credential Manager directly, so they never appear on a process command line.
+         */
+        protected String resolveField(String fieldPlaceholder)
+        {
+            Boolean encodeAsAutoType = false;
+            Boolean encodeQuotesForCommandline = false;
+            SprCompileFlags compileFlags = SprCompileFlags.All;
+            SprContext replaceContext = new SprContext(this.keepassEntry, this.keepassDatabase, compileFlags, encodeAsAutoType, encodeQuotesForCommandline);
+            return SprEngine.Compile(fieldPlaceholder, replaceContext);
         }
 
         /**

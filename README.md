@@ -4,9 +4,9 @@ AdvancedConnect is a plugin for [KeePass](http://keepass.info) password manager 
 
 ## Requirements
 
-- Microsoft Windows with .NET/[Mono](http://www.mono-project.com/download/) 2.0 or newer.
-- Unix/Linux with [Mono](http://www.mono-project.com/download/) 2.0 or newer.
-- [KeePass](http://keepass.info) version 2.28 or newer.
+- Microsoft Windows with .NET/[Mono](http://www.mono-project.com/download/) 3.5 or newer.
+- Unix/Linux with [Mono](http://www.mono-project.com/download/) 3.5 or newer.
+- [KeePass](http://keepass.info) version 2.59 or newer.
 
 
 ## Installation
@@ -18,7 +18,7 @@ AdvancedConnect is a plugin for [KeePass](http://keepass.info) password manager 
 
 - The plugin adds a new menu item named **AdvancedConnect** under **Tools** menu.
 - Use the **Main** tab in the **Options** dialog to configure the custom fields from which the plugin gets the connection method and the connection options field (overrides default options). <br /><br />
-On windows operation system the native remote desktop client have no option to provide the username and password via command-line. The built-in rdp support is a little workaround wich provides this functionality. You have to configure the keepass connection field (containing ip or hostname), a connection method (e.g. rdp) and you can set additional parameters (e.g. /w:1440 /h:900).<br />
+On windows operation system the native remote desktop client have no option to provide the username and password via command-line. The built-in rdp support is a little workaround wich provides this functionality by storing the credentials securely through the Windows Credential Manager API (so the password never appears on a command line). You have to configure the keepass connection field (containing ip or hostname), a connection method (e.g. rdp) and you can set additional parameters (e.g. /w:1440 /h:900).<br />
 - Use the **Applications** tab in the **Options** dialog to configure your connection applications. <br />
 The **Path** and **Commandline Options** column is also supporting keepass placeholders and OS environment variables.
 - To use a **portable configuration** you have to create an emtpy file named **AdvancedConnect.xml** next to **KeePass.exe**. <br />

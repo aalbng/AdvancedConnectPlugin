@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2016 TGW Software Services GmbH
+Copyright 2026 Andreas Albang
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance 
 with the License. You may obtain a copy of the License at
@@ -22,7 +22,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Andreas Albang")]
 [assembly: AssemblyProduct("KeePass Plugin")]
-[assembly: AssemblyCopyright("Copyright ©  2016")]
+[assembly: AssemblyCopyright("Copyright © 2026 Andreas Albang")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
