@@ -17,15 +17,26 @@ namespace AdvancedConnectPlugin.Tools
 {
     public static class StartProcess
     {
-        public static void Start(String path, String arguments)
+        //Starts a process and returns it. The caller owns the returned Process and is
+        //responsible for disposing it (for example within a using block).
+        public static Process Start(String path, String arguments)
         {
-            using (Process process = new Process()) {
+            Process process = new Process();
+            try
+            {
                 process.StartInfo.FileName = path;
                 process.StartInfo.Arguments = arguments;
                 process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 process.StartInfo.CreateNoWindow = true;
                 process.StartInfo.UseShellExecute = false;
                 process.Start();
+                return process;
+            }
+            catch
+            {
+                //Dispose the handle if the process could not be started, then rethrow
+                process.Dispose();
+                throw;
             }
         }
 

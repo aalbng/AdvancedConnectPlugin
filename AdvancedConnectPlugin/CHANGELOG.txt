@@ -1,6 +1,10 @@
 
 1.0.9
-Secure RDP credential handling and upgrade to .NET Framework 3.5
+- Secure RDP credential handling via the Windows Credential Manager API (no more password on the command line)
+- Adaptive credential cleanup: wait for mstsc to be ready and always remove the temporary credential
+- New configurable RDP credential cleanup delay (Options dialog and XML)
+- Upgrade target framework to .NET Framework 3.5 (KeePass 2.59+)
+- Enlarged Main settings tab and Options window
 
 1.0.8
 Change variable handling

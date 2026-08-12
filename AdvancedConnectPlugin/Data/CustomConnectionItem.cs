@@ -53,7 +53,11 @@ namespace AdvancedConnectPlugin.Data
                     try
                     {
                         //Fill placeholders in options and start programm
-                        StartProcess.Start(fillPlaceholders(this.application.path), fillPlaceholders(this.customConnectionOptions));
+                        using (System.Diagnostics.Process process =
+                            StartProcess.Start(fillPlaceholders(this.application.path), fillPlaceholders(this.customConnectionOptions)))
+                        {
+                            //The process runs independently; the handle is only disposed here
+                        }
                     }
                     catch (Exception startException)
                     {

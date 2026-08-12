@@ -24,6 +24,10 @@ namespace AdvancedConnectPlugin.Data
     public class RDPConnectionItem : ConnectionItem
     {
         public static String pathToRemoteDesktop = "C:\\Windows\\System32\\mstsc.exe";
+
+        //Maximum time (ms) to wait for mstsc to become ready before falling back to the safety buffer
+        private const Int32 waitForReadyTimeout = 15000;
+
         private Boolean rdpConsoleSession = false;
         private String rdpCustomParameter = String.Empty;
         private String rdpParameter = String.Empty;
@@ -54,6 +58,13 @@ namespace AdvancedConnectPlugin.Data
 
                 //Resolve the credential target host, using the same placeholder resolution mstsc receives
                 //(cmdkey/mstsc use the host without a port)
+                //
+                //Known limitation: the credential is keyed only by host (TERMSRV/<host>). Starting two
+                //connections to the SAME host almost simultaneously makes them share this credential entry,
+                //so the first cleanup may remove it before the second mstsc instance has read it. This
+                //matches the behaviour of the original cmdkey approach and is bounded by CRED_PERSIST_SESSION
+                //(the credential is removed automatically at logoff). Synchronising this was deemed
+                //disproportionate for the expected usage (interactive, one connection at a time).
                 String resolvedRdpAddress = fillPlaceholders(this.keepassEntry.Strings.ReadSafe(this.plugin.settings.rdpConnectionAddressField));
                 String credentialTarget = "TERMSRV/" + resolvedRdpAddress.Split(':')[0];
 
@@ -61,7 +72,15 @@ namespace AdvancedConnectPlugin.Data
                 String userName = resolveField("{USERNAME}");
                 String password = resolveField("{PASSWORD}");
 
-                //Create a thread to allow non gui blocking sleeps
+                //Buffer (ms) to keep the credential available after mstsc signals it is ready.
+                //Guard against invalid (negative) configuration values by falling back to a sane default.
+                Int32 credentialCleanupDelay = this.plugin.settings.rdpCredentialCleanupDelay;
+                if (credentialCleanupDelay < 0)
+                {
+                    credentialCleanupDelay = 2000;
+                }
+
+                //Create a thread to allow non gui blocking waits
                 new Thread(() =>
                 {
                     Thread.CurrentThread.IsBackground = true; //Background threads will stop automatically on program close
@@ -71,24 +90,37 @@ namespace AdvancedConnectPlugin.Data
                         //Store the rdp credentials securely through the Windows Credential Manager API
                         WindowsCredentialManager.Store(credentialTarget, userName, password);
 
-                        //Wait before RDP start
-                        Thread.Sleep(TimeSpan.FromMilliseconds(500));
-
                         //Start remote desktop with the already resolved address (avoids a second placeholder resolution)
-                        StartProcess.Start(RDPConnectionItem.pathToRemoteDesktop, buildRDPParameter(resolvedRdpAddress));
+                        using (System.Diagnostics.Process rdpProcess =
+                            StartProcess.Start(RDPConnectionItem.pathToRemoteDesktop, buildRDPParameter(resolvedRdpAddress)))
+                        {
+                            try
+                            {
+                                //Wait (generously) until mstsc has built up its message loop, i.e. is ready to
+                                //read the credentials, instead of guessing with a fixed delay.
+                                rdpProcess.WaitForInputIdle(RDPConnectionItem.waitForReadyTimeout);
+                            }
+                            catch (InvalidOperationException)
+                            {
+                                //WaitForInputIdle is only valid for GUI processes; ignore if not applicable
+                            }
 
-                        //Wait before credential remove
-                        Thread.Sleep(TimeSpan.FromMilliseconds(5000));
-
-                        //Remove the previously stored rdp credentials
-                        WindowsCredentialManager.Remove(credentialTarget);
+                            //Configurable safety buffer to make sure the credential was read before removing it
+                            if (credentialCleanupDelay > 0)
+                            {
+                                Thread.Sleep(credentialCleanupDelay);
+                            }
+                        }
                     }
                     catch (Exception startException)
                     {
                         //An unhandled exception on this thread would terminate KeePass
                         showStartError(RDPConnectionItem.pathToRemoteDesktop, startException);
-
-                        //Best effort cleanup so no credential is left behind after a failure
+                    }
+                    finally
+                    {
+                        //Always remove the temporary credential, even if the start failed.
+                        //See the "Known limitation" note above regarding concurrent connections to the same host.
                         try { WindowsCredentialManager.Remove(credentialTarget); }
                         catch (Exception) { }
                     }

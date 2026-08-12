@@ -50,6 +50,7 @@ namespace AdvancedConnectPlugin.GUI
             this.textBoxRDPConnectionMethod.Text = plugin.settings.rdpConnectionMethod;
             this.textBoxRDPCustomParameter.Text = plugin.settings.rdpCustomParameter;
             this.checkBoxSuppressUnresolvedFieldWarning.Checked = plugin.settings.suppressUnresolvedFieldWarning;
+            this.textBoxRDPCredentialCleanupDelay.Text = plugin.settings.rdpCredentialCleanupDelay.ToString();
             
             //Check if database is open to load the custom values from db
             //(Lock configuration items if databse is closed)
@@ -133,6 +134,19 @@ namespace AdvancedConnectPlugin.GUI
             this.plugin.settings.rdpConnectionMethod = this.textBoxRDPConnectionMethod.Text;
             this.plugin.settings.rdpCustomParameter = this.textBoxRDPCustomParameter.Text;
             this.plugin.settings.suppressUnresolvedFieldWarning = this.checkBoxSuppressUnresolvedFieldWarning.Checked;
+
+            //Parse the RDP credential cleanup delay (fall back to previous value on invalid input)
+            Int32 parsedCleanupDelay;
+            if (Int32.TryParse(this.textBoxRDPCredentialCleanupDelay.Text, out parsedCleanupDelay) && parsedCleanupDelay >= 0)
+            {
+                this.plugin.settings.rdpCredentialCleanupDelay = parsedCleanupDelay;
+            }
+            else
+            {
+                MessageBox.Show("'RDP credential cleanup (ms)' must be a non-negative whole number. The previous value was kept.",
+                    "Invalid value", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                this.textBoxRDPCredentialCleanupDelay.Text = this.plugin.settings.rdpCredentialCleanupDelay.ToString();
+            }
 
 
             //Write settings to settings file
