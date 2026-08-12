@@ -12,6 +12,7 @@
 - Fail-fast plugin loading: report load errors (including a missing embedded icon) via a clear message and abort cleanly; null-safe Terminate()
 - Show the concrete reason when saving the configuration fails and keep the Options dialog open on save errors
 - Connection start threads now work on an immutable snapshot of their input (no shared mutable state), set IsBackground before start
+- Custom applications can now use a chosen KeePass icon (standard or custom icon) instead of always the executable icon (double-click the icon column in the Options grid); custom icons are stored database-independently as Base64 PNG in the plugin configuration, so they keep working regardless of which or how many databases are open
 
 1.0.8
 Change variable handling

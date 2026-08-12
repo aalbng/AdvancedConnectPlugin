@@ -71,7 +71,19 @@ namespace AdvancedConnectPlugin.GUI
                         {
                             menuItem = new ToolStripMenuItem();
                             menuItem.Text = application.name;
-                            try { menuItem.Image = System.Drawing.Icon.ExtractAssociatedIcon(Environment.ExpandEnvironmentVariables(application.path)).ToBitmap(); } catch (Exception) { } //Resolvs OS variables and extracts the icon from the executable and sets it as context menut item bitmap
+
+                            //Prefer the KeePass icon selected for this application; otherwise fall back
+                            //to the executable's own icon (previous default behaviour).
+                            System.Drawing.Image selectedIcon = Tools.ApplicationIcon.Resolve(this.plugin.keepassHost, application);
+                            if (selectedIcon != null)
+                            {
+                                menuItem.Image = selectedIcon;
+                            }
+                            else
+                            {
+                                try { menuItem.Image = System.Drawing.Icon.ExtractAssociatedIcon(Environment.ExpandEnvironmentVariables(application.path)).ToBitmap(); } catch (Exception) { } //Resolvs OS variables and extracts the icon from the executable and sets it as context menut item bitmap
+                            }
+
                             menuItem.Tag = new Data.CustomConnectionItem(this.plugin, application, selectedEntries[0]); //Contains the spezific connectionitem (kpentry + applicationitem) object reference
                             menuItem.Click += entryContextMenuItem_CustomApplication_Click;
                             menuItemList.Add(menuItem);
