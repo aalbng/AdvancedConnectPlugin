@@ -8,6 +8,7 @@
 - Remove obsolete "Remote Desktop (Console)" connection option
 - Resolve mstsc.exe via %SystemRoot% instead of a hardcoded path
 - Robust settings file handling: wrap file streams in using blocks to guarantee handle release
+- More robust executable directory resolution (UNC/network share safe, no crash when the entry assembly is unavailable)
 
 1.0.8
 Change variable handling

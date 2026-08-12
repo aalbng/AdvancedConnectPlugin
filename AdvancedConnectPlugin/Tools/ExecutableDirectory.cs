@@ -20,13 +20,27 @@ namespace AdvancedConnectPlugin.Tools
 {
     public static class ExecutableDirectory
     {
-        //Returns the assembly directory
+        //Returns the directory of the hosting executable (KeePass), also for UNC/network share paths.
         public static string GetExecutableDirectory()
         {
-            string codeBase = Assembly.GetEntryAssembly().CodeBase;
-            UriBuilder uri = new UriBuilder(codeBase);
-            string path = Uri.UnescapeDataString(uri.Path);
-            return Path.GetDirectoryName(path);
+            //Prefer the host (entry) assembly, so a portable configuration can live next to KeePass.exe.
+            //Fall back to this plugin assembly if the entry assembly is not available (for example when
+            //the plugin was loaded in a context where GetEntryAssembly() returns null).
+            Assembly assembly = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
+
+            //Location is a plain filesystem path (handles UNC "\\server\share\..." correctly and needs
+            //no URI unescaping), so use it whenever it is available.
+            string location = assembly.Location;
+            if (!String.IsNullOrEmpty(location))
+            {
+                return Path.GetDirectoryName(location);
+            }
+
+            //Fallback: derive the path from CodeBase. Use Uri.LocalPath (not UriBuilder.Path), because
+            //LocalPath preserves the UNC host/share and unescapes the path, whereas UriBuilder.Path
+            //would drop the server name and mishandle special characters.
+            Uri codeBaseUri = new Uri(assembly.CodeBase);
+            return Path.GetDirectoryName(codeBaseUri.LocalPath);
         }
     }
 }
