@@ -1,4 +1,9 @@
 
+
+1.0.10
+- Warn when the configuration is loaded from the current working directory
+- Options: right-click an application's icon cell to remove a set standard/custom icon and restore the default executable icon
+
 1.0.9
 - Secure RDP credential handling via the Windows Credential Manager API (no more password on the command line)
 - Adaptive credential cleanup: wait for mstsc to be ready and always remove the temporary credential

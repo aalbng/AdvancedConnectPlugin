@@ -118,9 +118,28 @@ namespace AdvancedConnectPlugin
             }
             else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), configFileName)))
             {
-                //Set directory in installation path (portable configuration)
+                //Set directory to the current working directory (portable configuration).
                 configDirectory = Directory.GetCurrentDirectory();
                 this.pathToPluginConfigFile = Path.Combine(configDirectory, configFileName);
+
+                //The current working directory is inherited from whatever started KeePass (for example
+                //the folder of a double-clicked .kdbx file) and is not necessarily a trusted location.
+                //Because the configuration defines executable paths, command lines and placeholder
+                //substitution ({USERNAME}/{PASSWORD}), loading it from an untrusted directory can mean
+                //running an attacker-chosen program with the user's stored credentials. Warn the user so
+                //an unexpectedly planted configuration cannot be used silently.
+                MessageBox.Show(
+                    "The Advanced Connect configuration was loaded from the current working directory instead of "
+                    + "the portable program directory (next to KeePass.exe) or your user profile (AppData):"
+                    + Environment.NewLine + Environment.NewLine
+                    + this.pathToPluginConfigFile
+                    + Environment.NewLine + Environment.NewLine
+                    + "This directory is determined by how KeePass was started (for example the folder of a "
+                    + "double-clicked database file) and may not be trusted. The configuration controls which "
+                    + "programs are launched and receives your entry credentials. Only continue if you trust "
+                    + "the origin of this file.",
+                    "Advanced Connect: configuration loaded from working directory",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             else
             {
