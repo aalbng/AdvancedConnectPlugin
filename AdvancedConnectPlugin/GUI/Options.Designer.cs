@@ -58,6 +58,8 @@
             this.labelSuppressUnresolvedFieldWarning = new System.Windows.Forms.Label();
             this.labelRDPCredentialCleanupDelay = new System.Windows.Forms.Label();
             this.textBoxRDPCredentialCleanupDelay = new System.Windows.Forms.TextBox();
+            this.checkBoxSuppressWorkingDirectoryWarning = new System.Windows.Forms.CheckBox();
+            this.labelSuppressWorkingDirectoryWarning = new System.Windows.Forms.Label();
             this.tabControl.SuspendLayout();
             this.tabPageMain.SuspendLayout();
             this.groupBoxFieldMappings.SuspendLayout();
@@ -100,6 +102,8 @@
             this.groupBoxFieldMappings.Controls.Add(this.labelRDPConnectionParameter);
             this.groupBoxFieldMappings.Controls.Add(this.checkBoxSuppressUnresolvedFieldWarning);
             this.groupBoxFieldMappings.Controls.Add(this.labelSuppressUnresolvedFieldWarning);
+            this.groupBoxFieldMappings.Controls.Add(this.checkBoxSuppressWorkingDirectoryWarning);
+            this.groupBoxFieldMappings.Controls.Add(this.labelSuppressWorkingDirectoryWarning);
             this.groupBoxFieldMappings.Controls.Add(this.textBoxRDPCredentialCleanupDelay);
             this.groupBoxFieldMappings.Controls.Add(this.labelRDPCredentialCleanupDelay);
             this.groupBoxFieldMappings.Controls.Add(this.textBoxRDPConnectionMethod);
@@ -124,19 +128,19 @@
             // checkBoxEnableBuiltinRDP
             // 
             this.checkBoxEnableBuiltinRDP.AutoSize = true;
-            this.checkBoxEnableBuiltinRDP.Location = new System.Drawing.Point(232, 162);
+            this.checkBoxEnableBuiltinRDP.Location = new System.Drawing.Point(232, 192);
             this.checkBoxEnableBuiltinRDP.Name = "checkBoxEnableBuiltinRDP";
             this.checkBoxEnableBuiltinRDP.Size = new System.Drawing.Size(15, 14);
-            this.checkBoxEnableBuiltinRDP.TabIndex = 12;
+            this.checkBoxEnableBuiltinRDP.TabIndex = 14;
             this.checkBoxEnableBuiltinRDP.UseVisualStyleBackColor = true;
             // 
             // labelEnableBuiltinRDP
             // 
             this.labelEnableBuiltinRDP.AutoSize = false;
-            this.labelEnableBuiltinRDP.Location = new System.Drawing.Point(7, 162);
+            this.labelEnableBuiltinRDP.Location = new System.Drawing.Point(7, 192);
             this.labelEnableBuiltinRDP.Name = "labelEnableBuiltinRDP";
             this.labelEnableBuiltinRDP.Size = new System.Drawing.Size(206, 13);
-            this.labelEnableBuiltinRDP.TabIndex = 11;
+            this.labelEnableBuiltinRDP.TabIndex = 13;
             this.labelEnableBuiltinRDP.Text = "Enable built-in RDP support";
             // 
             // labelMainSeparator1
@@ -144,10 +148,10 @@
             this.labelMainSeparator1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.labelMainSeparator1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.labelMainSeparator1.Location = new System.Drawing.Point(7, 146);
+            this.labelMainSeparator1.Location = new System.Drawing.Point(7, 176);
             this.labelMainSeparator1.Name = "labelMainSeparator1";
             this.labelMainSeparator1.Size = new System.Drawing.Size(733, 2);
-            this.labelMainSeparator1.TabIndex = 10;
+            this.labelMainSeparator1.TabIndex = 12;
             // 
             // labelConncectionOptions
             // 
@@ -289,10 +293,10 @@
             // labelRDPConncectionAddress
             // 
             this.labelRDPConncectionAddress.AutoSize = false;
-            this.labelRDPConncectionAddress.Location = new System.Drawing.Point(7, 191);
+            this.labelRDPConncectionAddress.Location = new System.Drawing.Point(7, 221);
             this.labelRDPConncectionAddress.Name = "labelRDPConncectionAddress";
             this.labelRDPConncectionAddress.Size = new System.Drawing.Size(185, 13);
-            this.labelRDPConncectionAddress.TabIndex = 13;
+            this.labelRDPConncectionAddress.TabIndex = 15;
             this.labelRDPConncectionAddress.Text = "Connection address field";
             // 
             // comboBoxRDPConncectionAddress
@@ -300,56 +304,56 @@
             this.comboBoxRDPConncectionAddress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBoxRDPConncectionAddress.FormattingEnabled = true;
-            this.comboBoxRDPConncectionAddress.Location = new System.Drawing.Point(232, 188);
+            this.comboBoxRDPConncectionAddress.Location = new System.Drawing.Point(232, 218);
             this.comboBoxRDPConncectionAddress.Name = "comboBoxRDPConncectionAddress";
             this.comboBoxRDPConncectionAddress.Size = new System.Drawing.Size(508, 21);
-            this.comboBoxRDPConncectionAddress.TabIndex = 14;
+            this.comboBoxRDPConncectionAddress.TabIndex = 16;
             this.comboBoxRDPConncectionAddress.Text = "Keepass Field";
             // 
             // textBoxRDPCustomParameter
             // 
             this.textBoxRDPCustomParameter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxRDPCustomParameter.Location = new System.Drawing.Point(232, 241);
+            this.textBoxRDPCustomParameter.Location = new System.Drawing.Point(232, 271);
             this.textBoxRDPCustomParameter.Name = "textBoxRDPCustomParameter";
             this.textBoxRDPCustomParameter.Size = new System.Drawing.Size(508, 20);
-            this.textBoxRDPCustomParameter.TabIndex = 18;
+            this.textBoxRDPCustomParameter.TabIndex = 20;
             // 
             // labelRDPConncectionMethod
             // 
             this.labelRDPConncectionMethod.AutoSize = false;
-            this.labelRDPConncectionMethod.Location = new System.Drawing.Point(7, 218);
+            this.labelRDPConncectionMethod.Location = new System.Drawing.Point(7, 248);
             this.labelRDPConncectionMethod.Name = "labelRDPConncectionMethod";
             this.labelRDPConncectionMethod.Size = new System.Drawing.Size(150, 13);
-            this.labelRDPConncectionMethod.TabIndex = 15;
+            this.labelRDPConncectionMethod.TabIndex = 17;
             this.labelRDPConncectionMethod.Text = "Connection Method";
             // 
             // textBoxRDPConnectionMethod
             // 
             this.textBoxRDPConnectionMethod.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxRDPConnectionMethod.Location = new System.Drawing.Point(232, 215);
+            this.textBoxRDPConnectionMethod.Location = new System.Drawing.Point(232, 245);
             this.textBoxRDPConnectionMethod.Name = "textBoxRDPConnectionMethod";
             this.textBoxRDPConnectionMethod.Size = new System.Drawing.Size(508, 20);
-            this.textBoxRDPConnectionMethod.TabIndex = 16;
+            this.textBoxRDPConnectionMethod.TabIndex = 18;
             // 
             // labelRDPConnectionParameter
             // 
             this.labelRDPConnectionParameter.AutoSize = false;
-            this.labelRDPConnectionParameter.Location = new System.Drawing.Point(7, 244);
+            this.labelRDPConnectionParameter.Location = new System.Drawing.Point(7, 274);
             this.labelRDPConnectionParameter.Name = "labelRDPConnectionParameter";
             this.labelRDPConnectionParameter.Size = new System.Drawing.Size(195, 13);
-            this.labelRDPConnectionParameter.TabIndex = 17;
+            this.labelRDPConnectionParameter.TabIndex = 19;
             this.labelRDPConnectionParameter.Text = "Additional RDP Parameter";
             // 
             // labelRDPInfo
             // 
             this.labelRDPInfo.AutoSize = false;
             this.labelRDPInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelRDPInfo.Location = new System.Drawing.Point(7, 276);
+            this.labelRDPInfo.Location = new System.Drawing.Point(7, 306);
             this.labelRDPInfo.Name = "labelRDPInfo";
             this.labelRDPInfo.Size = new System.Drawing.Size(285, 13);
-            this.labelRDPInfo.TabIndex = 19;
+            this.labelRDPInfo.TabIndex = 21;
             this.labelRDPInfo.Text = "Windows operating systems only";
             // 
             // label1
@@ -357,10 +361,10 @@
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label1.Location = new System.Drawing.Point(7, 305);
+            this.label1.Location = new System.Drawing.Point(7, 335);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(733, 2);
-            this.label1.TabIndex = 20;
+            this.label1.TabIndex = 22;
             // 
             // labelSuppressUnresolvedFieldWarning
             // 
@@ -383,18 +387,36 @@
             // labelRDPCredentialCleanupDelay
             // 
             this.labelRDPCredentialCleanupDelay.AutoSize = false;
-            this.labelRDPCredentialCleanupDelay.Location = new System.Drawing.Point(7, 117);
+            this.labelRDPCredentialCleanupDelay.Location = new System.Drawing.Point(7, 147);
             this.labelRDPCredentialCleanupDelay.Name = "labelRDPCredentialCleanupDelay";
             this.labelRDPCredentialCleanupDelay.Size = new System.Drawing.Size(216, 13);
-            this.labelRDPCredentialCleanupDelay.TabIndex = 8;
+            this.labelRDPCredentialCleanupDelay.TabIndex = 10;
             this.labelRDPCredentialCleanupDelay.Text = "RDP credential cleanup (ms)";
             // 
             // textBoxRDPCredentialCleanupDelay
             // 
-            this.textBoxRDPCredentialCleanupDelay.Location = new System.Drawing.Point(232, 114);
+            this.textBoxRDPCredentialCleanupDelay.Location = new System.Drawing.Point(232, 144);
             this.textBoxRDPCredentialCleanupDelay.Name = "textBoxRDPCredentialCleanupDelay";
             this.textBoxRDPCredentialCleanupDelay.Size = new System.Drawing.Size(120, 20);
-            this.textBoxRDPCredentialCleanupDelay.TabIndex = 9;
+            this.textBoxRDPCredentialCleanupDelay.TabIndex = 11;
+            // 
+            // labelSuppressWorkingDirectoryWarning
+            // 
+            this.labelSuppressWorkingDirectoryWarning.AutoSize = false;
+            this.labelSuppressWorkingDirectoryWarning.Location = new System.Drawing.Point(7, 117);
+            this.labelSuppressWorkingDirectoryWarning.Name = "labelSuppressWorkingDirectoryWarning";
+            this.labelSuppressWorkingDirectoryWarning.Size = new System.Drawing.Size(216, 13);
+            this.labelSuppressWorkingDirectoryWarning.TabIndex = 8;
+            this.labelSuppressWorkingDirectoryWarning.Text = "No working directory warning";
+            // 
+            // checkBoxSuppressWorkingDirectoryWarning
+            // 
+            this.checkBoxSuppressWorkingDirectoryWarning.AutoSize = true;
+            this.checkBoxSuppressWorkingDirectoryWarning.Location = new System.Drawing.Point(232, 117);
+            this.checkBoxSuppressWorkingDirectoryWarning.Name = "checkBoxSuppressWorkingDirectoryWarning";
+            this.checkBoxSuppressWorkingDirectoryWarning.Size = new System.Drawing.Size(15, 14);
+            this.checkBoxSuppressWorkingDirectoryWarning.TabIndex = 9;
+            this.checkBoxSuppressWorkingDirectoryWarning.UseVisualStyleBackColor = true;
             // 
             // Options
             // 
@@ -452,5 +474,7 @@
         private System.Windows.Forms.Label labelSuppressUnresolvedFieldWarning;
         private System.Windows.Forms.Label labelRDPCredentialCleanupDelay;
         private System.Windows.Forms.TextBox textBoxRDPCredentialCleanupDelay;
+        private System.Windows.Forms.CheckBox checkBoxSuppressWorkingDirectoryWarning;
+        private System.Windows.Forms.Label labelSuppressWorkingDirectoryWarning;
     }
 }

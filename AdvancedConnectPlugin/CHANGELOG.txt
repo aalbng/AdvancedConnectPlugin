@@ -2,6 +2,8 @@
 
 1.0.11
 - Options (Main tab): move the "No unresolved field warning" and "RDP credential cleanup (ms)" settings directly below the "Connection options field"
+- Options (Main tab): new "No working directory warning" option to disable the warning shown when the configuration is loaded from the current working directory (only safe when that directory is protected by strict file system permissions)
+- The working directory warning now has a "Do not show this warning again" checkbox to disable it directly from the dialog
 
 1.0.10
 - Warn when the configuration is loaded from the current working directory

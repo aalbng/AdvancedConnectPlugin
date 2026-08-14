@@ -31,6 +31,12 @@ namespace AdvancedConnectPlugin.Data
         [XmlElement(ElementName = "SuppressUnresolvedFieldWarning")]
         public Boolean suppressUnresolvedFieldWarning = false;
 
+        //When true, the warning shown when the configuration is loaded from the current working
+        //directory (instead of the program directory or AppData) is suppressed. This is only safe
+        //when the working directory is protected by strict file system permissions (see README).
+        [XmlElement(ElementName = "SuppressWorkingDirectoryWarning")]
+        public Boolean suppressWorkingDirectoryWarning = false;
+
         [XmlElement(ElementName = "EnableBuiltinRDP")]
         public Boolean enableBuiltinRDP = true;
         [XmlElement(ElementName = "RDPConnectionAddressField")]

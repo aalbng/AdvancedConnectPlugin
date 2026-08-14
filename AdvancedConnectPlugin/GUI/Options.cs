@@ -51,6 +51,7 @@ namespace AdvancedConnectPlugin.GUI
             this.textBoxRDPConnectionMethod.Text = plugin.settings.rdpConnectionMethod;
             this.textBoxRDPCustomParameter.Text = plugin.settings.rdpCustomParameter;
             this.checkBoxSuppressUnresolvedFieldWarning.Checked = plugin.settings.suppressUnresolvedFieldWarning;
+            this.checkBoxSuppressWorkingDirectoryWarning.Checked = plugin.settings.suppressWorkingDirectoryWarning;
             this.textBoxRDPCredentialCleanupDelay.Text = plugin.settings.rdpCredentialCleanupDelay.ToString();
             
             //Check if database is open to load the custom values from db
@@ -180,6 +181,7 @@ namespace AdvancedConnectPlugin.GUI
             this.plugin.settings.rdpConnectionMethod = this.textBoxRDPConnectionMethod.Text;
             this.plugin.settings.rdpCustomParameter = this.textBoxRDPCustomParameter.Text;
             this.plugin.settings.suppressUnresolvedFieldWarning = this.checkBoxSuppressUnresolvedFieldWarning.Checked;
+            this.plugin.settings.suppressWorkingDirectoryWarning = this.checkBoxSuppressWorkingDirectoryWarning.Checked;
 
             //Parse the RDP credential cleanup delay (fall back to previous value on invalid input)
             Int32 parsedCleanupDelay;

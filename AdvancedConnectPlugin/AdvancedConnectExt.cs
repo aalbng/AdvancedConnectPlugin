@@ -29,6 +29,11 @@ namespace AdvancedConnectPlugin
         private GUI.ContextMenuExtension contextMenuExtension = null;
         public Icon pluginIcon = null;
 
+        //Set by buildConfigPath() when the configuration was loaded from the current working directory
+        //(an untrusted location). The warning is shown after the settings are loaded, so it can be
+        //suppressed via the SuppressWorkingDirectoryWarning option.
+        private Boolean configLoadedFromWorkingDirectory = false;
+
 
         //Keepass start; Load plugin
         public override bool Initialize(IPluginHost keepassHost)
@@ -48,6 +53,11 @@ namespace AdvancedConnectPlugin
                 buildConfigPath();
                 settings = new Data.Settings(this);
                 settings = this.settings.load();
+
+                //Warn (unless suppressed) when the configuration was loaded from the current working
+                //directory. This is done after loading the settings so the user's suppression choice
+                //(stored in the configuration itself) is available.
+                warnIfConfigLoadedFromWorkingDirectory();
 
                 //Extend Tools Menu (Options window)
                 this.toolsMenuExtension = new GUI.ToolsMenuExtension(this);
@@ -122,24 +132,10 @@ namespace AdvancedConnectPlugin
                 configDirectory = Directory.GetCurrentDirectory();
                 this.pathToPluginConfigFile = Path.Combine(configDirectory, configFileName);
 
-                //The current working directory is inherited from whatever started KeePass (for example
-                //the folder of a double-clicked .kdbx file) and is not necessarily a trusted location.
-                //Because the configuration defines executable paths, command lines and placeholder
-                //substitution ({USERNAME}/{PASSWORD}), loading it from an untrusted directory can mean
-                //running an attacker-chosen program with the user's stored credentials. Warn the user so
-                //an unexpectedly planted configuration cannot be used silently.
-                MessageBox.Show(
-                    "The Advanced Connect configuration was loaded from the current working directory instead of "
-                    + "the portable program directory (next to KeePass.exe) or your user profile (AppData):"
-                    + Environment.NewLine + Environment.NewLine
-                    + this.pathToPluginConfigFile
-                    + Environment.NewLine + Environment.NewLine
-                    + "This directory is determined by how KeePass was started (for example the folder of a "
-                    + "double-clicked database file) and may not be trusted. The configuration controls which "
-                    + "programs are launched and receives your entry credentials. Only continue if you trust "
-                    + "the origin of this file.",
-                    "Advanced Connect: configuration loaded from working directory",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                //Remember that the configuration comes from the (untrusted) working directory. The
+                //actual warning is shown later (after the settings are loaded), so it can be
+                //suppressed via the SuppressWorkingDirectoryWarning option.
+                this.configLoadedFromWorkingDirectory = true;
             }
             else
             {
@@ -147,6 +143,53 @@ namespace AdvancedConnectPlugin
                 configDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "KeePass/");
                 System.IO.Directory.CreateDirectory(configDirectory);
                 this.pathToPluginConfigFile = Path.Combine(configDirectory, configFileName);
+            }
+        }
+
+        //Shows a warning when the configuration was loaded from the current working directory, unless
+        //the user disabled it via the SuppressWorkingDirectoryWarning option.
+        //The current working directory is inherited from whatever started KeePass (for example the
+        //folder of a double-clicked .kdbx file) and is not necessarily a trusted location. Because the
+        //configuration defines executable paths, command lines and placeholder substitution
+        //({USERNAME}/{PASSWORD}), loading it from an untrusted directory can mean running an
+        //attacker-chosen program with the user's stored credentials. Suppressing this warning is only
+        //safe when the working directory is protected by strict file system permissions (see README).
+        private void warnIfConfigLoadedFromWorkingDirectory()
+        {
+            if (!this.configLoadedFromWorkingDirectory)
+            {
+                return;
+            }
+            if (this.settings != null && this.settings.suppressWorkingDirectoryWarning)
+            {
+                return;
+            }
+
+            //Show the warning with a "Do not show again" checkbox, so the user can disable it directly.
+            //Suppressing it is only safe when the working directory is protected by strict file system
+            //permissions (see README).
+            using (GUI.WorkingDirectoryWarningDialog warningDialog =
+                new GUI.WorkingDirectoryWarningDialog(this.pluginIcon, this.pathToPluginConfigFile))
+            {
+                //The dialog is shown during plugin load, before the KeePass main window exists, so it is
+                //centered on the screen (StartPosition = CenterScreen) rather than on an owner window.
+                warningDialog.ShowDialog();
+
+                //Checkbox ticked = disable the warning from now on and persist the choice.
+                if (warningDialog.DoNotShowAgain && this.settings != null)
+                {
+                    this.settings.suppressWorkingDirectoryWarning = true;
+
+                    String saveErrorMessage;
+                    if (!this.settings.save(out saveErrorMessage))
+                    {
+                        MessageBox.Show(
+                            "The warning was disabled for this session, but the configuration could not be saved, "
+                            + "so the warning may appear again:"
+                            + Environment.NewLine + Environment.NewLine + saveErrorMessage,
+                            "Advanced Connect", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                }
             }
         }
 
