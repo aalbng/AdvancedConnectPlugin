@@ -32,15 +32,6 @@ The plugin looks for its **AdvancedConnect.xml** configuration in the following 
 2. **Current working directory** – the directory KeePass was started from (see below).
 3. **User profile** – *%appdata%\KeePass\AdvancedConnect.xml* (created automatically if none of the above exists).
 
-#### Per-database configuration via the working directory
-
-Loading from the current working directory enables a **per-database configuration** scenario: place an **AdvancedConnect.xml** next to a specific **.kdbx** file and start KeePass from that folder (for example by double-clicking the database). KeePass then inherits that folder as its working directory and the plugin loads the configuration located there.
-
-A typical use case is support work with a **separate KeePass database per customer**, each accompanied by its own plugin configuration, so opening a customer's database loads a dedicated connection environment.
-
-> **Security warning:** The working directory is determined by how KeePass was started and is **not necessarily a trusted location** (for example a download folder from which a database was opened). Because the configuration defines which programs are launched and receives your entry credentials (`{USERNAME}`/`{PASSWORD}`), loading it from an untrusted directory can run an attacker-chosen program with your credentials.<br />
-> To make this transparent, the plugin shows a **warning message** whenever the configuration is loaded from the working directory instead of the program directory or *%appdata%*. Only continue if you trust the origin of that file.
-
 
 ## Example
 - Configure main options
@@ -57,6 +48,17 @@ A typical use case is support work with a **separate KeePass database per custom
 Please take note that launching applications via command-line can expose your password arguments in the taskmanager.
 
 The configuration file (**AdvancedConnect.xml**) defines which programs are launched and how your entry credentials are passed to them. Only use configuration files from a trusted source. When the configuration is loaded from the current working directory (see [Configuration file resolution](#configuration-file-resolution)) the plugin shows a warning, because that location may not be trusted.
+
+#### Per-database configuration via the working directory
+
+Loading from the current working directory enables a **per-database configuration** scenario: place an **AdvancedConnect.xml** next to a specific **.kdbx** file and start KeePass from that folder (for example by double-clicking the database). KeePass then inherits that folder as its working directory and the plugin loads the configuration located there.
+
+A typical use case is support work with a **separate KeePass database per customer**, each accompanied by its own plugin configuration, so opening a customer's database loads a dedicated connection environment.
+
+To protect against tampering, any shared working directory should be strictly protected with file system permissions, so that only trusted users can create or modify the **AdvancedConnect.xml** located there.
+
+> **Security warning:** The working directory is determined by how KeePass was started and is **not necessarily a trusted location** (for example a download folder from which a database was opened). Because the configuration defines which programs are launched and receives your entry credentials (`{USERNAME}`/`{PASSWORD}`), loading it from an untrusted directory can run an attacker-chosen program with your credentials.<br />
+> To make this transparent, the plugin shows a **warning message** whenever the configuration is loaded from the working directory instead of the program directory or *%appdata%*. Only continue if you trust the origin of that file.
 
 ## Repository
 
