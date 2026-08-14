@@ -1,5 +1,8 @@
 
 
+1.0.11
+- Options (Main tab): move the "No unresolved field warning" and "RDP credential cleanup (ms)" settings directly below the "Connection options field"
+
 1.0.10
 - Warn when the configuration is loaded from the current working directory
 - Options: right-click an application's icon cell to remove a set standard/custom icon and restore the default executable icon
