@@ -28,9 +28,9 @@ The **Path** and **Commandline Options** column is also supporting keepass place
 
 The plugin looks for its **AdvancedConnect.xml** configuration in the following order and uses the first one it finds:
 
-1. **Program directory** – next to **KeePass.exe** (portable / admin configuration).
-2. **Current working directory** – the directory KeePass was started from (see below).
-3. **User profile** – *%appdata%\KeePass\AdvancedConnect.xml* (created automatically if none of the above exists).
+1. **Program directory** â€“ next to **KeePass.exe** (portable / admin configuration).
+2. **Current working directory** â€“ the directory KeePass was started from (see below).
+3. **User profile** â€“ *%appdata%\KeePass\AdvancedConnect.xml* (created automatically if none of the above exists).
 
 
 ## Example
@@ -58,7 +58,6 @@ A typical use case is support work with a **separate KeePass database per custom
 To protect against tampering, any shared working directory should be strictly protected with file system permissions, so that only trusted users can create or modify the **AdvancedConnect.xml** located there.
 
 > **Security warning:** The working directory is determined by how KeePass was started and is **not necessarily a trusted location** (for example a download folder from which a database was opened). Because the configuration defines which programs are launched and receives your entry credentials (`{USERNAME}`/`{PASSWORD}`), loading it from an untrusted directory can run an attacker-chosen program with your credentials.<br />
-> To make this transparent, the plugin shows a **warning message** whenever the configuration is loaded from the working directory instead of the program directory or *%appdata%*. Only continue if you trust the origin of that file.
 
 ## Repository
 
