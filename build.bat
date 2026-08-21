@@ -9,6 +9,10 @@ IF NOT EXIST build (
 )
 
 
+echo Cleaning previous build output...
+IF EXIST "%SOURCE_PATH%\bin" rd /s /q "%SOURCE_PATH%\bin"
+IF EXIST "%SOURCE_PATH%\obj" rd /s /q "%SOURCE_PATH%\obj"
+
 echo Building PLGX file...
 %KEEPASS_PATH% --plgx-prereq-net:3.5 --plgx-prereq-kp:2.59 --plgx-create "%SOURCE_PATH%"
 
