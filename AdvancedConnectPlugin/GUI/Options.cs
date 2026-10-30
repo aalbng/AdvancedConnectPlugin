@@ -112,16 +112,24 @@ namespace AdvancedConnectPlugin.GUI
             this.dataGridViewApplications.Columns["method"].MinimumWidth = 70;
             this.dataGridViewApplications.Columns["method"].DisplayIndex = 2;
 
+            this.dataGridViewApplications.Columns["useNamedPipe"].HeaderText = "Named Pipe";
+            this.dataGridViewApplications.Columns["useNamedPipe"].ToolTipText = "Use Windows Named Pipe to transfer password securely in RAM";
+            this.dataGridViewApplications.Columns["useNamedPipe"].Width = 80;
+            this.dataGridViewApplications.Columns["useNamedPipe"].MinimumWidth = 80;
+            this.dataGridViewApplications.Columns["useNamedPipe"].DisplayIndex = 3;
+
             this.dataGridViewApplications.Columns["path"].HeaderText = "Path";
             this.dataGridViewApplications.Columns["path"].Width = 120;
             this.dataGridViewApplications.Columns["path"].MinimumWidth = 120;
-            this.dataGridViewApplications.Columns["path"].DisplayIndex = 3;
+            this.dataGridViewApplications.Columns["path"].DisplayIndex = 4;
 
             this.dataGridViewApplications.Columns["options"].HeaderText = "Commandline Options";
             this.dataGridViewApplications.Columns["options"].Width = 100;
             this.dataGridViewApplications.Columns["options"].MinimumWidth = 100;
             this.dataGridViewApplications.Columns["options"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            this.dataGridViewApplications.Columns["options"].DisplayIndex = 4;
+            this.dataGridViewApplications.Columns["options"].DisplayIndex = 5;
+
+            this.dataGridViewApplications.Columns["name"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
 
             //Hidden helper columns for the (non-visible) icon selection are not needed:
             //the selection lives on the ApplicationItem; the image is refreshed from there.

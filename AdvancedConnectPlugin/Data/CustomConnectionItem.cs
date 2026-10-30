@@ -14,6 +14,11 @@ using AdvancedConnectPlugin.Tools;
 using KeePassLib;
 using System;
 using System.IO;
+using System.IO.Pipes;
+using System.Security.AccessControl;
+using System.Security.Principal;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 
 namespace AdvancedConnectPlugin.Data
@@ -56,11 +61,79 @@ namespace AdvancedConnectPlugin.Data
                 {
                     try
                     {
-                        //Fill placeholders in options and start programm
-                        using (System.Diagnostics.Process process =
-                            StartProcess.Start(fillPlaceholders(applicationPath), fillPlaceholders(applicationOptions)))
+                        bool isNamedPipeEnabled = this.application.useNamedPipe &&
+                                                  Regex.IsMatch(applicationOptions, @"\{PASSWORD\}", RegexOptions.IgnoreCase);
+
+                        if (isNamedPipeEnabled)
                         {
-                            //The process runs independently; the handle is only disposed here
+                            string pipeName = "kp_" + Guid.NewGuid().ToString("N");
+                            string pipePath = @"\\.\pipe\" + pipeName;
+
+                            string rawPassword = resolveField("{PASSWORD}");
+
+                            applicationOptions = Regex.Replace(
+                                applicationOptions,
+                                @"\{PASSWORD\}",
+                                "\"" + pipePath + "\"",
+                                RegexOptions.IgnoreCase
+                            );
+
+                            PipeSecurity pipeSecurity = new PipeSecurity();
+                            WindowsIdentity currentUser = WindowsIdentity.GetCurrent();
+                            pipeSecurity.AddAccessRule(new PipeAccessRule(
+                                currentUser.User,
+                                PipeAccessRights.ReadWrite | PipeAccessRights.CreateNewInstance,
+                                AccessControlType.Allow));
+
+                            using (NamedPipeServerStream server = new NamedPipeServerStream(
+                                pipeName,
+                                PipeDirection.InOut,
+                                1,
+                                PipeTransmissionMode.Byte,
+                                PipeOptions.Asynchronous,
+                                1024,
+                                1024,
+                                pipeSecurity))
+                            {
+                                IAsyncResult asyncResult = server.BeginWaitForConnection(null, null);
+
+                                string resolvedOptions = fillPlaceholders(applicationOptions);
+                                using (System.Diagnostics.Process process =
+                                    StartProcess.Start(fillPlaceholders(applicationPath), resolvedOptions))
+                                {
+                                }
+
+                                if (asyncResult.AsyncWaitHandle.WaitOne(15000))
+                                {
+                                    server.EndWaitForConnection(asyncResult);
+
+                                    StreamWriter writer = new StreamWriter(server, new UTF8Encoding(false), 1024);
+                                    writer.NewLine = "\n";
+                                    writer.WriteLine(rawPassword);
+                                    writer.Flush();
+
+                                    try
+                                    {
+                                        if (server.IsConnected)
+                                        {
+                                            server.WaitForPipeDrain();
+                                        }
+                                    }
+                                    catch (Exception)
+                                    {
+                                       
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            //Fill placeholders in options and start programm
+                            using (System.Diagnostics.Process process =
+                                StartProcess.Start(fillPlaceholders(applicationPath), fillPlaceholders(applicationOptions)))
+                            {
+                                //The process runs independently; the handle is only disposed here
+                            }
                         }
                     }
                     catch (Exception startException)

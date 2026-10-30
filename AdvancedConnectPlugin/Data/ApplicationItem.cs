@@ -24,6 +24,7 @@ namespace AdvancedConnectPlugin.Data
         public String method { get; set; }
         public String path { get; set; }
         public String options { get; set; }
+        public bool useNamedPipe { get; set; }
 
         //Optional KeePass standard icon id (index into PwIcon). NoIcon (-1) means "use the exe icon".
         public Int32 iconId { get; set; }
@@ -45,6 +46,7 @@ namespace AdvancedConnectPlugin.Data
             this.method = method;
             this.path = path;
             this.options = options;
+            this.useNamedPipe = false;
         }
 
         //Removes any selected KeePass standard or custom icon and restores the default behaviour
